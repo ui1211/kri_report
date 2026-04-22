@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "isBackground": true,
+            "problemMatcher": "$tsc",
+            "suppressFailures": false,
+            "label": "tsc",
+            "command": "npm",
+            "args": ["run", "build"]
+        },
+        {
+            "type": "shell",
+            "command": "npm",
+            "args": ["run", "watch"]
+        }
+    ]
+}
