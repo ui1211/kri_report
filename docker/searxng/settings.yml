@@ -1,0 +1,43 @@
+use_default_settings: true
+
+server:
+  limiter: false
+  public_instance: false
+  secret_key: "xhoauhsocjabnujboeubvajsv"
+  formats:
+    - json
+    - html
+
+search:
+  safe_search: 0
+  formats:
+    - json
+    - html
+
+botdetection:
+  ip_limit:
+    filter_link_local: false
+    link_token: false
+  user_agent:
+    filter: []
+    block: []
+
+engines:
+  - name: wikipedia
+    engine: wikipedia
+  - name: brave
+    engine: brave
+  - name: bing
+    engine: bing
+
+# use_default_settings: true
+
+# server:
+#   limiter: false
+#   public_instance: false
+#   secret_key: "xhoauhsocjabnujboeubvajsv"
+#   formats:
+#     - json
+
+# search:
+#   safe_search: 0
