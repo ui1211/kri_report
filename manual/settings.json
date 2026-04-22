@@ -1,0 +1,249 @@
+{
+    // ========================================
+    // Python / Environment
+    // ========================================
+    "python.defaultInterpreterPath": "C:\\Users\\yutou\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.terminal.useEnvFile": true,
+    "python.terminal.executeInFileDir": true,
+    "python.terminal.activateEnvironment": false,
+    "python.createEnvironment.trigger": "off",
+
+    // ========================================
+    // Encoding / Files
+    // ========================================
+    "files.encoding": "utf8",
+    "files.autoGuessEncoding": false,
+    "files.candidateGuessEncodings": ["utf8"],
+    "[bat]": {
+        "files.encoding": "shiftjis"
+    },
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.largeFileOptimizations": true,
+    "search.followSymlinks": false,
+
+    // ========================================
+    // Editor (Global)
+    // ========================================
+    "editor.mouseWheelZoom": true,
+    "editor.wordWrap": "off",
+    "diffEditor.wordWrap": "off",
+    "editor.guides.indentation": false,
+    "editor.guides.bracketPairs": false,
+    "editor.inlayHints.enabled": "off",
+    "editor.hover.sticky": false,
+    "editor.parameterHints.enabled": false,
+    "editor.parameterHints.cycle": false,
+    "editor.minimap.showSlider": "always",
+    "workbench.editor.alwaysShowEditorActions": true,
+    "workbench.editor.empty.hint": "hidden",
+
+    // ========================================
+    // Formatter (共通方針)
+    // ========================================
+    "editor.formatOnSave": false,
+    "notebook.formatOnSave.enabled": false,
+    "notebook.defaultFormatter": "ms-python.black-formatter",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    },
+    "black-formatter.args": ["--line-length=120"],
+    "isort.args": ["--profile", "black"],
+
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // ========================================
+    // Jupyter
+    // ========================================
+    "jupyter.askForKernelRestart": false,
+    "jupyter.interactiveWindow.creationMode": "perFile",
+    "notebook.lineNumbers": "on",
+    "notebook.editorOptionsCustomizations": {
+        "editor.tabSize": 4,
+        "editor.indentSize": 4
+    },
+
+    // ========================================
+    // Terminal (Windows)
+    // ========================================
+    "terminal.integrated.env.windows": {
+        "PSExecutionPolicyPreference": "RemoteSigned"
+    },
+    "terminal.integrated.commandsToSkipShell": [
+        "language-julia.interrupt"
+    ],
+
+    // ========================================
+    // UI / Theme
+    // ========================================
+    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.colorCustomizations": {
+        "editor.lineHighlightBackground": "#1073cf2d",
+        "editor.lineHighlightBorder": "#9fced11f"
+    },
+
+    // ========================================
+    // Markdown / PlantUML
+    // ========================================
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "markdown.marp.themes": ["mytheme.css"],
+    "markdown-pdf.mermaidServer": "https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js",
+
+    "plantuml.render": "Local",
+    "plantuml.server": "",
+    "plantuml.commandArgs": [],
+    "markdown-preview-enhanced.plantumlJarPath": "C:\\Program Files\\plantUML\\plantuml-mit-1.2025.8.jar",
+    "markdown-preview-enhanced.plantumlServer": "",
+    "markdown-preview-enhanced.usePandocParser": false,
+    "markdown-preview-enhanced.enableScriptExecution": true,
+
+    // ========================================
+    // Git / GitHub
+    // ========================================
+    "git.confirmSync": false,
+
+    // ========================================
+    // Notes / Images
+    // ========================================
+    "pasteImage.path": "${currentFileDir}\\_img",
+    "pasteImage.insertPattern": "<img src=\"${imageFilePath}\" width=\"1200\">",
+    "vsnotes.defaultNotePath": "C:\\Users\\yutou\\Desktop\\work\\notes\\docs",
+    "vsnotes.tokens": [
+        {
+            "type": "datetime",
+            "token": "{dt}",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "type": "title",
+            "token": "{title}",
+            "format": "Untitled"
+        },
+        {
+            "type": "extension",
+            "token": "{ext}",
+            "format": "md"
+        }
+    ],
+
+        // ========================================
+    // Spell Checker
+    // ========================================
+    "cSpell.userWords": [
+        "bamei","bango","chakujun","dtypes","hanshoku","isin","joho",
+        "kaisai","kakutei","keibajo","ketto","kubun","ninkijun",
+        "pckeiba","seinen","showgrid","showlegend","tansho",
+        "toroku","umaban","wakuban","winrate","xaxis","yaxis"
+    ],
+
+    // ========================================
+    // Security / Accessibility
+    // ========================================
+    "security.workspace.trust.untrustedFiles": "open",
+    "accessibility.signals.chatEditModifiedFile": {
+        "sound": "off"
+    },
+    "accessibility.signalOptions.volume": 0,
+    "explorer.confirmDelete": false,
+    "insertDateString.format": "YYYY-MM-DD",
+    "vsicons.dontShowNewVersionMessage": true,
+    "chatgpt.composerEnterBehavior": "enter",
+    "liveshare.anonymousGuestApproval": "accept",
+    "git.replaceTagsWhenPull": true,
+    "chatgpt.localeOverride": "ja-JP",
+    // "julia.symbolCacheDownload": true,
+    // "vscode-office.editorTheme": "Github Dark",
+    // "github.copilot.enable": {
+    //     "*": false,
+    //     "plaintext": false,
+    //     "markdown": false,
+    //     "scminput": false
+    // },
+    "explorer.fileNesting.patterns": {
+        "*.ts": "${capture}.js",
+        "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+        "*.jsx": "${capture}.js",
+        "*.tsx": "${capture}.ts",
+        "tsconfig.json": "tsconfig.*.json",
+        "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+        "pubspec.yaml": "pubspec.lock,pubspec_overrides.yaml,.packages,.flutter-plugins,.flutter-plugins-dependencies,.metadata",
+        "*.dart": "${capture}.g.dart",
+        "*.cs": "${capture}.designer.cs,${capture}.g.cs,${capture}.generated.cs,${capture}.run.json,${capture}.settings.json,${capture}.settings.*.json",
+        "*.csproj": "${capture}.csproj.user",
+        "*.json": "${capture}.Development.json",
+        "*.cshtml": "${capture}.cshtml.cs,${capture}.cshtml.css",
+        "*.razor": "${capture}.razor.cs,${capture}.razor.css",
+        "*.resx": "${capture}.Designer.cs",
+        "*.xaml": "${capture}.xaml.cs",
+        "*.sqlite": "${capture}.${extname}-*",
+        "*.db": "${capture}.${extname}-*",
+        "*.sqlite3": "${capture}.${extname}-*",
+        "*.db3": "${capture}.${extname}-*",
+        "*.sdb": "${capture}.${extname}-*",
+        "*.s3db": "${capture}.${extname}-*"
+    },
+    "files.associations": {
+        "*.yaml": "yaml"
+    },
+    "yaml.schemas": {
+        "file:///c%3A/Users/yutou/.vscode/extensions/continue.continue-1.3.38-win32-x64/config-yaml-schema.json": [
+            ".continue/**/*.yaml"
+        ]
+    },
+
+    "files.watcherExclude": {
+        "**/.git/**": true,
+        "**/node_modules/**": true,
+        "**/data/**": true,
+        "**/logs/**": true,
+        "**/*.csv": true,
+        "**/*.parquet": true
+    },
+    "search.exclude": {
+        "**/.git/**": true,
+        "**/node_modules/**": true,
+        "**/data/**": true
+    },
+    "chat.mcp.gallery.enabled": true,
+    "liveServer.settings.donotShowInfoMsg": true,
+    "builder.allowSelfSignedCertificates": "Yes",
+    "remote.autoForwardPortsSource": "hybrid",
+    "comments.openView": "never",
+    "terminal.integrated.initialHint": false,
+    "explorer.confirmDragAndDrop": false,
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "diffEditor.maxComputationTime": 0,
+    "git.openRepositoryInParentFolders": "always",
+    "chatgpt.runCodexInWindowsSubsystemForLinux": false,
+}
