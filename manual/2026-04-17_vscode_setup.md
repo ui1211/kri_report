@@ -5,8 +5,7 @@
 
 - Python環境構築
 - VSCode設定
-- CSV読み込み
-- グラフ表示
+- git設定
 
 ---
 
