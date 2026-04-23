@@ -1,0 +1,35 @@
+{
+  "mcpServers": {
+    "pencil": {
+      "autoApprove": [
+        "get_style_guide",
+        "get_style_guide_tags"
+      ],
+      "disabled": true,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "c:\\Users\\yutou\\.vscode\\extensions\\highagency.pencildev-0.6.40\\out\\mcp-server-windows-x64.exe",
+      "args": [
+        "--app",
+        "visual_studio_code"
+      ],
+      "env": {}
+    },
+    "searxng": {
+      "autoApprove": [
+        "searxng_web_search"
+      ],
+      "disabled": false,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-searxng"
+      ],
+      "env": {
+        "SEARXNG_URL": "http://localhost:8080"
+      }
+    }
+  }
+}
