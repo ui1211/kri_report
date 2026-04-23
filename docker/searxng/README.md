@@ -40,7 +40,7 @@
 
 # SearXNG 起動
 docker rm -f searxng 2>/dev/null || true
-docker run -d -p 8080:8080 -v "$(pwd)/settings.yml:/etc/searxng/settings.yml" --name searxng --restart unless-stopped searxng/searxng
+docker run -d -p 8080:8080 -v "$(pwd)/settings.yml:/etc/settings.yml" --name searxng --restart unless-stopped searxng/searxng
 
 # Local Deep Research 起動
 docker rm -f local-deep-research 2>/dev/null || true
