@@ -10,7 +10,7 @@
 ## 起動コマンド（PowerShell）
 
 ```
-docker rm -f searxng; docker run -d -p 8080:8080 -v ${PWD}/searxng/settings.yml:/etc/searxng/settings.yml --name searxng --restart unless-stopped searxng/searxng
+docker rm -f searxng; docker run -d -p 8080:8080 -v ${PWD}/settings.yml:/etc/searxng/settings.yml --name searxng --restart unless-stopped searxng/searxng
 ```
 
 ```
