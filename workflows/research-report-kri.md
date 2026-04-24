@@ -1,316 +1,183 @@
-# レポート調査ワークフロー（report-format-kri完全準拠版）
+# research-report-kri Workflow
 
----
+Use this workflow to create or update Japanese research reports with two outputs:
 
-## 使用スキル
+- `{topic}_レポート.md`
+- `{topic}_A4_要約.md`
 
-本ワークフローでは以下のスキルのみ使用する：
+The control instructions are in English for stability with small/local models. The generated report, A4 summary, filenames, headings, and fixed labels must remain Japanese.
 
-* report-format-kri（レポート整形・テンプレート再現）
-* report-fact-check（事実検証・品質保証）
-* report-format-a4 (調査事項をA4レポートで別出力)
+## Required Skills
 
----
+Use these skills:
 
-## 1. 事前分岐（必須）
+- `research-report`: end-to-end research, validation, report, and A4 summary workflow
+- `report-format-kri`: fixed 10-section Japanese report
+- `report-format-a4`: fixed 5-section Japanese A4 summary
+- `report-fact-check`: factual, link, structure, and issue-ID validation
 
-必ず最初にユーザーへ確認する：
+Do not use the old `report-format` skill for new report output.
 
-1. 新規作成
-2. 既存レポート更新
+## Task Mode
 
-※この確認を行わずに処理を開始してはならない
+Infer the task mode from the user request.
 
----
+- New report: research the topic and create both output files.
+- Existing report update: read the existing document, update facts only when needed, and regenerate both output files.
+- Format-only: do not perform external search; reformat only the provided material.
 
-### 1-1 新規作成
+If the user does not specify the mode:
 
-検索期間を確認する：
+- If the input is an existing document, use existing report update.
+- If the input is only a topic, use new report.
+- If the user says "format only", "整形のみ", or "検索不要", use format-only.
 
-* 直近（半年以内）
-  * 最新情報を優先
+Do not stop only to ask for mode unless the request is genuinely unsafe or impossible to infer.
 
-* 不問
-  * 信頼性（論文・公式・技術資料）を優先
+## Input Types
 
-→ 外部検索を実施し、新規レポートを作成
+Accept any of these:
 
----
+- Topic name
+- Search results
+- Research notes
+- Existing Markdown report
+- URLs and source excerpts
 
-### 1-2 更新
+## Research Rules
 
-更新方法を確認する：
+Skip this section for format-only tasks.
 
-* 最新情報で更新
-* 信頼性重視で更新
-* フォーマットのみ（検索禁止）
+1. Search from at least three angles.
+2. Prefer official documentation, papers, GitHub, vendor technical documents, standards, and government sources.
+3. Use third-party sources to cross-check major claims when possible.
+4. Prefer primary sources for numbers, dates, specifications, benchmarks, and production examples.
+5. If evidence is insufficient, write `不明`.
 
-※フォーマットのみの場合は調査プロセスを完全スキップ
+Useful query angles:
 
----
-
-## 2. 入力
-
-以下のいずれかを受け取る：
-
-* トピック
-* 既存ドキュメント
-
----
-
-## 3. 調査プロセス
-
-※フォーマットのみの場合はスキップ
-
----
-
-### 3-1 初期検索
-
-* 外部検索を実行
-* 最低3クエリ以上
-
-例：
 - `{topic}`
-- `{topic} latest`
+- `{topic} OSS`
 - `{topic} benchmark`
-- `{topic} use case`
+- `{topic} case study`
+- `{topic} limitation`
+- `{topic} architecture`
 
----
+## Source Evaluation
 
-### 3-2 深掘り検索
+Classify sources before writing:
 
-以下をトリガーに再検索：
+- High: official documents, papers, standards, GitHub repositories, technical vendor documents, government documents
+- Medium: technical media, specialist blogs, case-study articles
+- Low: unsourced pages, reposted content, social media, advertising-heavy pages
 
-* 数値
-* 固有名詞
-* 曖昧表現
+Do not rely only on low-quality sources for important claims.
 
-観点：
-- 技術仕様
-- 性能
-- 実運用
-- 制約
+## Main Workflow
 
----
+1. Determine task mode.
+2. Collect input material and sources.
+3. Extract topic, URLs, numbers, dates, current-state facts, issues, solutions, and value claims.
+4. Run `report-fact-check` criteria on important facts before writing.
+5. Generate `{topic}_レポート.md` with `report-format-kri`.
+6. Validate the report with `report-fact-check`.
+7. Generate `{topic}_A4_要約.md` with `report-format-a4`, using only the validated report as input.
+8. Validate the A4 summary with `report-fact-check`.
+9. Update `plan/CHANGELOG.md` when the workflow or skill design changed, not for ordinary report content changes.
 
-### 3-3 ソース評価
+## Main Report Requirements
 
-必須条件：
+The main report must follow the `report-format-kri` structure exactly.
 
-* 最低2ソース以上
-* 一次情報のみは禁止
-* 第三者情報と必ず組み合わせる
+Required Japanese sections:
 
----
+```md
+# レポート
 
-### 3-4 ファクトチェック（report-fact-check）
+## 1. メタ情報
+## 2. 概要
+## 3. 現状
+## 4. 課題
+## 5. AI解決
+## 6. 価値
+## 7. トピック一覧
+## 8. 比較まとめ
+## 9. 更新履歴
+## 10. 参考リンク一覧
+```
 
-検証対象：
+Rules:
 
-* 数値
-* 日付
-* 主張
-* ソース整合性
+- Keep all headings in Japanese.
+- Use inline Markdown links only.
+- Do not use footnotes, reference IDs, citation IDs, or `[参照: ...]`.
+- Assign issues as `C1`, `C2`, `C3`.
+- Reuse issue IDs in `AI解決` and `価値`.
+- Preserve `現状 -> 課題 -> AI解決 -> 価値`.
 
-ルール：
+## A4 Summary Requirements
 
-* 不一致 → 高信頼側を採用
-* 判断不能 → 「不明」
+The A4 summary must follow the `report-format-a4` structure exactly.
 
----
+Required Japanese sections:
 
-### 3-5 リンク整理
+```md
+# タイトル
 
-* 参照ID禁止
-* 本文リンクのみ使用
-* 同一URLは統一
+## 要約
+## 現状
+## 課題
+## 解決
+## 価値
+```
 
----
+Rules:
 
-### 3-6 構造マッピング（重要追加）
+- Use only facts from the validated main report.
+- Do not add new information.
+- Keep the output short enough for an A4-style summary.
+- `## 価値` must include a number, comparison, or `定量効果なし`.
 
-収集情報を以下構造に必ず分類：
+## Update Rules
 
-#### 現状
-- 事例
-- 点検方法
+For existing report updates:
 
-#### 課題
-- AI精度
-- 人不足
-- その他
+- Update facts only when new facts, changed numbers, dead links, or better sources exist.
+- Preserve valid inline links.
+- Convert old footnotes, reference IDs, or citation IDs into inline Markdown links.
+- Do not rewrite purely for style if the facts and structure are already correct.
+- Add one update line to the main report's `## 9. 更新履歴`.
 
-#### 解決
-- OSS
-- 研究
-- 実運用事例
+## Re-search Conditions
 
-#### 価値
-- コスト削減
-- 精度向上
-- 自動化
-- リスク低減
+Perform more research when:
 
-※分類できない情報は使用禁止
+- An important claim has only one weak source.
+- Numbers conflict across sources.
+- A source is unclear or unavailable.
+- A technical explanation is too shallow.
+- The topic granularity is inconsistent.
 
----
+Do not perform more research for format-only tasks.
 
-### 3-7 トピック粒度検証
-
-* 技術 / 製品 / 組織の混在禁止
-* 必要に応じて分割または統一
-
----
-
-## 4. レポート生成
-
-必須ルール：
-
-* report-format-kriを使用
-* Template完全一致
-* 構造改変禁止
-* 本文リンクのみ使用
-* 更新履歴を記録
-
----
-
-## 4.5 構造検証（強化版）
-
-以下をすべて満たす必要あり：
-
-### セクション構造
-
-* 全10セクション存在
-
----
-
-### 論理構造
-
-* 3→4→5→6が以下に対応している：
-
-| セクション | 内容 |
-|----------|------|
-| 3 | 現状（事例＋点検方法） |
-| 4 | 課題（AI精度＋人不足） |
-| 5 | AI解決（OSS＋研究＋事例） |
-| 6 | 価値 |
-
----
-
-### 内容検証
-
-* 3に事例 or 点検方法が含まれる
-* 4にAI精度 or 人不足が含まれる
-* 5にOSS / 研究 / 事例が含まれる
-
----
-
-### トピック検証
-
-各トピックに以下必須：
-
-- 概要（リンクあり）
-- 特徴（箇条書き）
-- 数値 or 不明
-- 制約
-
----
-
-### 比較まとめ
-
-必須：
-
-- 違い
-- 使い分け
-- 強み / 弱み
-
----
-
-### リンク検証
-
-* 全トピックに本文リンクあり
-* 参考リンクと一致
-
----
-
-違反時：
-
-→ report-format-kriを再実行
-
----
-
-## 5. 更新処理
-
----
-
-### 5-1 ドキュメント解析
-
-抽出：
-
-* トピック
-* 構造
-* 記述
-
----
-
-### 5-2 更新判定
-
-更新条件：
-
-* 新事実あり
-* 数値更新
-* 信頼性向上
-
-更新禁止：
-
-* 表現差分のみ
-* 解釈差分のみ
-
----
-
-### 5-3 更新実行
-
-* 差分のみ更新
-* report-format-kriで再生成
-
----
-
-## 6. 再検索条件
-
-以下で再検索：
-
-* 1ソースのみ
-* 数値不一致
-* 不明情報あり
-* 技術的不足
-
----
-
-## 7. 再生成条件
-
-以下で再生成：
-
-* Template不一致
-* 構造崩壊（現状→課題→解決→価値）
-* トピック粒度不正
-
----
-
-## 8. 完了条件
-
-以下すべて満たす：
-
-* 構造完全一致
-* 論理構造成立
-* 本文リンク適正
-* fact-check完了
-
----
-
-## 更新履歴
-
-* 2026-04-03：初版
-* 2026-04-03：skill分離
-* 2026-04-03：構造検証追加
-* 2026-04-09：10セクション対応
-* 2026-04-09：構造マッピング強制化（現状→課題→解決→価値）
+## Completion Checks
+
+Finish only when all are true:
+
+- `{topic}_レポート.md` exists.
+- `{topic}_A4_要約.md` exists.
+- The main report has exactly the required 10 Japanese sections.
+- The A4 summary has exactly the required 5 Japanese sections.
+- Body links and `## 10. 参考リンク一覧` are consistent.
+- No footnotes, reference IDs, citation IDs, or `file:///` links remain.
+- `report-fact-check` has no high-severity unresolved issues.
+- The A4 summary contains no information absent from the main report.
+
+## Do Not
+
+- Do not translate Japanese headings or fixed labels.
+- Do not create extra report sections.
+- Do not invent facts, effects, numbers, dates, links, papers, or products.
+- Do not force user confirmation when safe defaults are available.
+- Do not use reference IDs or footnotes.
+- Do not add ordinary report-content changes to `plan/CHANGELOG.md`; reserve it for skill/workflow design changes.

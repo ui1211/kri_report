@@ -1,35 +1,30 @@
 ---
 name: report-format-a4
-description: A4 1枚相当の要約レポートを作るスキル。テンプレート固定、5セクション維持、各セクションごとの文字数制限を遵守とする。
+description: "Use this skill to create a Japanese A4-style summary (A4要約) from an existing report or notes. The output must be Japanese, must not add new information, and must keep the fixed 5-section structure: 要約, 現状, 課題, 解決, 価値."
 ---
 
 # report-format-a4
 
-## Goal
+## Purpose
 
-入力された情報から、抽出と圧縮のみでレポートを構成する。
+Compress existing information into a short Japanese A4-style summary.
 
-- 新規情報の生成は禁止
-- 入力に存在する情報のみを使用する
+This skill is for summarization only. Do not perform new research. Do not add explanations, facts, numbers, or claims that are not in the input. If a main report exists, use only that report as the source.
 
-## Operating Rules
+The final output must be written in Japanese. Do not translate the required Japanese headings.
 
-- 入力に存在する情報のみを使用する
-- 情報が不足する場合は「不明」または「記載なし」と明示する
-- 情報が過多な場合、以下の優先順位で採用する
-  1. 数値
-  2. 因果関係
-  3. 実行手段
-- 解決は課題に直接対応する内容のみ記述する
-- 課題に対応しない解決は記述しない
-- 数値が存在しない場合は「定量効果なし」と明示する
-- タイトルはテーマを30文字以内で要約する
-- 文字数過時はセクション内で再要約して対応する
-- 各セクションは文章形式で記載する
+## Core Rules
 
-## Mandatory Output Contract
+1. MUST keep exactly the five required sections.
+2. MUST NOT add information that is not in the input.
+3. Use `不明`, `記載なし`, or `定量効果なし` when information is missing.
+4. MUST preserve the flow: `現状 -> 課題 -> 解決 -> 価値`.
+5. `## 価値` MUST include a number, a comparison, or `定量効果なし`.
+6. If a section exceeds the character limit, summarize it again. Do not add a new section.
 
-出力は必ず次の形にする。
+## Required Output Template
+
+Keep this Japanese template exactly.
 
 ```md
 # タイトル
@@ -50,59 +45,65 @@ description: A4 1枚相当の要約レポートを作るスキル。テンプレ
 - 
 ```
 
-## Section-Specific Constraints
+## Character Limits
+
+- タイトル: 30 Japanese characters or less
+- 要約: 300 Japanese characters or less
+- 現状: 300 Japanese characters or less
+- 課題: 400 Japanese characters or less
+- 解決: 400 Japanese characters or less
+- 価値: 300 Japanese characters or less
+
+## Section Rules
 
 ### 要約
-- ドキュメント全体の要約文章
-- 300 文字以内の要約した文章
+
+- Summarize the whole document in one short bullet or sentence.
+- Include current state, issue, solution, and value.
 
 ### 現状
 
-- 背景と現状認識の文章を書く
-- 300 文字以内の要約した文章
+- Compress background, market/domain state, and operational facts.
+- Avoid detailed topic-by-topic explanations.
 
 ### 課題
 
-- 現状から生じる問題の文章を書く
-- 400 文字以内の要約した文章
+- Include only problems that directly follow from the current state.
+- If there are multiple issues, group them by importance.
 
 ### 解決
 
-- 課題に対する打ち手の文章を書く
-- 手段、根拠、リンクを必要最小限で書く
-- OSS、LLM、Fine-tuning、ルールベースなどの具体語を使ってよい
-- 400 文字以内の要約した文章
+- Include only actions that answer the issues.
+- Use terms such as OSS, AI, LLM, fine-tuning, rule-based, or production use only if they appear in the input.
+- Do not write a technology introduction unrelated to the issues.
 
 ### 価値
 
-- 定量効果を中心に文章を書く
-- エンドユーザ向けの価値提供の側面から評価
-- 例: `30% 削減`, `50% 短縮`, `2 倍`, `1 日 -> 半日`
-- 300 文字以内文章
+- Prefer reduction rate, saved time, accuracy, count, cost, or other numeric evidence.
+- If there is no number, use a comparison.
+- If there is no number or comparison, write `定量効果なし`.
 
-## Execution Procedure
+## Workflow
 
-1. 入力からテーマ、課題、数値、URL を抽出する
-2. 5 セクションのどこに置くかを決める
-3. まずテンプレートへ配置する
-4. 文字数制限を超える箇所を再要約する
-5. 5 セクションが揃っていることを確認する
+1. Extract topic, current state, issues, solution, value, numbers, and URLs from the input.
+2. Assign each extracted item to one of the five sections.
+3. Fill the fixed template.
+4. Re-summarize any section that exceeds the character limit.
+5. Check that no information outside the input was added.
 
-## Pre-Submission Checklist
+## Completion Checks
 
-- `# タイトル` と 5 つの `##` 見出しだけがある
-- 各セクションが文字数制限以内
-- 価値に定量表現または「定量効果なし」がある
-- 本文中のリンクだけを使っている
-- 脚注と `file:///` がない
+- The output has only `# タイトル` and the five required `##` headings.
+- The five section names and order match the template.
+- Every section is within the character limit.
+- `## 価値` has a number, comparison, or `定量効果なし`.
+- There are no footnotes, citation IDs, reference IDs, or `file:///` links.
+- There is no information absent from the source report or notes.
 
-## Prohibitions
+## Do Not
 
-- セクションの追加
-- セクションの削除
-- セクションの統合
-- セクションの分割
-- セクションの文字超過
-- 脚注記法
-- 定量のない価値
-- A4 1枚相当を超える出力
+- Do not add, remove, merge, split, or reorder sections.
+- Do not invent facts, numbers, links, or impact.
+- Do not exceed character limits.
+- Do not write value without quantitative evidence, comparison, or `定量効果なし`.
+- Do not use footnotes, citation IDs, or reference IDs.

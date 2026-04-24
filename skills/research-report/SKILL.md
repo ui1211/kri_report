@@ -1,276 +1,91 @@
 ---
 name: research-report
-description: 調査結果をレポートにしてまとめる
+description: Use this workflow to create or update Japanese research reports (調査レポート, レポート作成, A4要約). It performs research, source evaluation, fact checking, a fixed 10-section report via report-format-kri, and a fixed 5-section A4 summary via report-format-a4.
 ---
 
-# レポート調査ワークフロー
+# research-report
 
----
+## Purpose
 
-## 使用スキル
+Create or update two Japanese Markdown files:
 
-本ワークフローでは以下のスキルのみ使用する：
+- `{topic}_レポート.md`: a 10-section report that follows `report-format-kri`
+- `{topic}_A4_要約.md`: a 5-section A4-style summary that follows `report-format-a4`
 
-- report-format（レポート整形・テンプレート再現）
-- report-fact-check（事実検証・品質保証）
+The final outputs must be written in Japanese. Keep all required Japanese headings and labels unchanged.
 
----
+## Use These Skills
 
-## 1. 事前分岐（必須）
+- `report-format-kri`: format the main 10-section Japanese report.
+- `report-format-a4`: summarize the validated report into a 5-section Japanese A4 summary.
+- `report-fact-check`: validate facts, links, numbers, structure, and issue-ID consistency.
 
-必ず最初にユーザーへ確認する：
+Do not use the old `report-format` skill for new work. If old reports mention it, migrate the output to `report-format-kri`.
 
-1. 新規作成
-2. 既存レポート更新
+## Task Mode
 
-※この確認を行わずに処理を開始してはならない
+Infer the task mode from the user request.
 
----
+- New report: research the topic and create both files.
+- Existing report update: read the existing material, research only if needed, and update both files.
+- Format-only: do not perform external search; format only the provided material.
 
-### 1-1 新規作成
+If the mode is unclear, use this default:
 
-検索期間を確認する：
+- If the user provides an existing document, treat it as an existing report update.
+- If the user provides only a topic, treat it as a new report.
 
-- 直近（半年以内）
-  - 最新情報を優先する
+## Research Rules
 
-- 不問
-  - 信頼性の高い情報（論文・公式・技術資料）を優先する
+Run web research only when the user request allows or requires it.
 
-→ 外部検索を実施し、新規レポートを作成する
+1. Search from at least three angles.
+2. Combine official sources, papers, GitHub, vendor documents, and third-party sources.
+3. Prefer primary sources for numbers, dates, specifications, benchmarks, and case studies.
+4. Cross-check important claims with at least two sources when possible.
+5. Write `不明` when evidence is insufficient.
 
----
-
-### 1-2 更新
-
-更新方法を確認する：
-
-- 最新情報で更新（直近半年）
-  - 再検索を行い更新
-
-- 信頼性重視で更新（期間不問）
-  - 高信頼ソースで再検索
-
-- フォーマットのみ
-  - 検索は禁止
-  - report-formatで整形のみ実施
-
-※「フォーマットのみ」の場合は調査プロセスをスキップする
-
----
-
-## 2. 入力
-
-以下のいずれかを受け取る：
-
-- トピック（例：技術名・分野）
-- 既存ドキュメント
-
----
-
-## 3. 調査プロセス
-
-※「フォーマットのみ」の場合はスキップ
-
----
-
-### 3-1 初期検索
-
-- 外部検索を実行する
-- 最低3クエリ以上、異なる観点で検索する
-
-例：
+Useful query angles:
 
 - `{topic}`
-- `{topic} latest`
+- `{topic} OSS`
 - `{topic} benchmark`
-- `{topic} architecture`
-
----
-
-### 3-2 追加検索（深掘り）
-
-以下の場合に再検索する：
-
-- 数値が出ている
-- 固有名詞（技術・製品・論文）が出ている
-- 内容が曖昧
-
-観点：
-
-- 技術仕様
-- 性能・ベンチマーク
-- 実運用
-- 制約条件
-
----
-
-### 3-3 ソース評価
-
-以下を必ず満たす：
-
-- 最低2ソース以上で裏付けを取る
-- 一次情報（公式・GitHub等）の単独使用は禁止
-- 必ず第三者情報と組み合わせる
-
----
-
-### 3-4 ファクトチェック（report-fact-check）
-
-以下を検証する：
-
-- 数値
-- 日付
-- 主張
-- 参照整合性
-- ソース品質
-
-不一致時：
-
-- 信頼性の高い情報を採用
-- 判断不能な場合は「不明」とする
-
-各ソースに付与：
-
-- F：ファクトチェック済み
-- L：リンク生存確認済み
-
----
-
-### 3-5 参照整理
-
-- 参照IDを付与する
-- 記述とソースを紐付ける
-- 同一ソースは同一IDを使用する
-- 各ソースに取得日時（@YYYY-MM-DD）を付与する
-
----
-
-### 3-6 トピック粒度検証（重要）
-
-- 技術 / 製品 / 組織の粒度が混在していないか確認する
-- 混在している場合：
-  - 分割する または
-  - 最も支配的な粒度に統一する
-
-※この工程をスキップしてはならない
-
----
-
-## 4. レポート生成
-
-以下を実施する：
-
-- report-formatスキルを使用する
-- Template構造を完全再現する（変更禁止）
-- テンプレート外の構造を生成してはならない
-- 参照IDを付与する
-- 更新履歴を記録する
-
----
-
-## 4.5 構造検証（必須）
-
-生成後に必ず検証する：
-
-- セクション数が6である
-- Template構造と完全一致している
-- 各トピックに以下4項目が存在する：
-  - 概要
-  - 特徴
-  - 主要スペック or 数値
-  - 制約 or 注意点
-- 比較まとめに以下3項目が存在する：
-  - 違い
-  - 使い分け
-  - 強み / 弱み
-- すべてのトピックに参照が存在する
-
-違反時：
-
-- report-formatを再実行する
-
----
-
-## 5. 更新処理
-
----
-
-### 5-1 ドキュメント解析
-
-以下を抽出する：
-
-- タイトル
-- 日付
-- トピック構造
-- 参照ID
-- 各記述
-
----
-
-### 5-2 更新判定
-
-以下の場合のみ更新する：
-
-- 新しい事実が存在する
-- 数値・仕様が変更されている
-- より信頼性の高い情報が存在する
-
-以下は更新しない：
-
-- 表現の違いのみ
-- 解釈の違いのみ
-
----
-
-### 5-3 更新実行
-
-- 変更箇所のみ更新する
-- 参照IDを維持または追加する
-- report-formatで再整形する
-
----
-
-## 6. 品質ルール
-
-※詳細は report-fact-check に委譲する
-
----
-
-## 7. 再検索条件
-
-以下の場合は再検索する：
-
-- 情報が1ソースのみ
-- 数値が一致しない
-- 出典が不明確
-- 技術的に不十分
-
----
-
-## 8 再生成条件
-
-以下の場合はレポート生成を再実行する：
-
-- Template不一致
-- 参照不足
-- トピック分割不正
-
----
-
-## 9. 完了条件
-
-以下を満たした場合に完了：
-
-- トピックが網羅されている
-- 参照IDがすべて付与されている
-- report-fact-checkが完了している
-- Template構造が完全再現されている
-
----
-
-## 更新履歴
-
-- 2026-04-03：初版整理（曖昧性排除・分岐明確化）
-- 2026-04-03：skill分離対応（report-format / report-fact-check導入）
-- 2026-04-03：構造検証・再生成ルール追加（安定性向上）
+- `{topic} case study`
+- `{topic} limitation`
+
+## Workflow
+
+1. Determine the task mode.
+2. Extract topic, URLs, numbers, issues, solutions, and value claims from input or research results.
+3. Validate numbers, dates, claims, and link quality using the `report-fact-check` criteria.
+4. Create the 10-section report with `report-format-kri`.
+5. Run `report-fact-check` again on the report.
+6. Create the A4 summary with `report-format-a4`, using only the validated report as input.
+7. Validate both outputs before finishing.
+
+## Update Rules
+
+- Update content only when new facts, changed numbers, dead links, or better sources exist.
+- If the facts are unchanged, limit changes to structure, clarity, and link consistency.
+- Preserve valid inline links.
+- Convert old footnotes, reference IDs, or citation IDs into normal inline Markdown links.
+- Add one line to `## 9. 更新履歴` with the date and update summary.
+
+## Output Requirements
+
+Both files must be produced unless the user explicitly asks for only one.
+
+- The main report must match the `report-format-kri` 10-section structure.
+- The A4 summary must contain only the five `report-format-a4` sections.
+- Body links and `## 10. 参考リンク一覧` must be consistent.
+- The A4 summary must not contain facts absent from the main report.
+- Do not include footnotes, citation IDs, reference IDs, or `file:///` links.
+
+## Completion Checks
+
+- `{topic}_レポート.md` exists.
+- `{topic}_A4_要約.md` exists.
+- The report has `## 1. メタ情報` through `## 10. 参考リンク一覧`.
+- The A4 summary has `## 要約`, `## 現状`, `## 課題`, `## 解決`, and `## 価値`.
+- No high-severity `report-fact-check` issue remains.
+- If research was performed, important numbers, dates, and claims have evidence links.

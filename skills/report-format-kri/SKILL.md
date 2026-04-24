@@ -1,40 +1,50 @@
 ---
 name: report-format-kri
-description: 検索結果や調査メモを、課題起点（現状→課題→AI解決→価値）で構造化された厳格な Markdown レポートへ再生成するスキル（因果関係・比較軸・定量性を強化した改良版）。
+description: Use this skill to format research notes, search results, or existing drafts into a Japanese Markdown report (レポート作成, 調査レポート). The output must be Japanese and must follow the fixed 10-section structure, inline Markdown links, C1/C2 issue IDs, and the 現状→課題→AI解決→価値 reasoning flow.
 ---
 
 # report-format-kri
 
-## Goal
+## Purpose
 
-入力情報を素材として扱い、以下を同時に満たす Markdown レポートへ再生成する。
+Format the input into a Japanese Markdown report.
 
-- 本文を読みながら、その場でリンク先を確認できる
-- 注釈、脚注、参照 ID を使わない
-- 見出し、順序、ラベルを固定し、出力ゆらぎを最小化する
-- PDF へ変換しても外部リンクが残りやすい構造を使う
-- 「現状 → 課題 → AI解決 → 価値」の論理構造を必ず維持する
-- 課題と解決の因果関係を明示する
-- 価値は可能な限り定量または比較で示す
+Use only the information provided by the user or collected by the calling workflow. This skill formats and rewrites; it does not decide whether web research is allowed. Use `research-report` when research is required. Use `report-fact-check` when validation is required.
 
----
+The final output must be written in Japanese. Do not translate the required Japanese headings or labels.
 
-## Operating Rules
+## Core Rules
 
-- 入力の見出し構造は流用しない
-- 必ず本スキルのテンプレートをそのまま使う
-- セクション名、順序、箇条書きラベルを変更しない
-- トピックは「技術単位 or 製品単位」で分割する（抽象トピック禁止）
-- 各トピックで最低 1 つ、本文リンクを付与する
-- 数値、仕様、比較主張には本文リンクを付ける
-- 根拠がない場合は推測せず「不明」と書く
-- 該当しない項目は「該当なし」と明示する
+1. MUST keep exactly the 10 required sections.
+2. MUST NOT change Japanese section headings, section order, or numbering.
+3. MUST use normal inline Markdown links: `[text](https://example.com)`.
+4. MUST NOT use footnotes, reference IDs, citation IDs, or `[参照: ...]`.
+5. MUST NOT invent facts, numbers, effects, products, papers, or links.
+6. If evidence is missing, write `不明` or `該当なし`.
+7. MUST assign issue IDs as `C1`, `C2`, `C3` in `## 4. 課題`.
+8. MUST reuse the same issue IDs in `## 5. AI解決` and `## 6. 価値`.
+9. MUST preserve the reasoning flow: `現状 -> 課題 -> AI解決 -> 価値`.
+10. MUST include at least one of these for value: number, comparison, or evidence link.
 
----
+## Input Extraction
 
-## Mandatory Output Contract
+Before writing, extract the following from the input:
 
-出力は必ず次の骨格を維持する。
+- Topic
+- Creation or update date
+- Main topics
+- URLs
+- Numbers, specifications, and dates
+- Current-state facts
+- Issues
+- AI, OSS, research, or production examples
+- Quantified effects or comparison points
+
+Do not fill missing items with guesses. Put `不明` or `該当なし` in the template when required information is missing.
+
+## Required Output Template
+
+The output must follow this template exactly. Keep the Japanese headings and labels unchanged.
 
 ```md
 # レポート
@@ -48,8 +58,8 @@ description: 検索結果や調査メモを、課題起点（現状→課題→A
 - 
 
 ## 3. 現状
-- 業界・領域全体の状況
-- 実運用事例（リンク付き）
+- 業界・領域全体の状況:
+- 実運用事例:
 
 ## 4. 課題
 - C1:
@@ -66,7 +76,8 @@ description: 検索結果や調査メモを、課題起点（現状→課題→A
   - 実運用:
 
 ## 6. 価値
-- 
+- C1由来:
+- C2由来:
 
 ## 7. トピック一覧
 ### {トピック名}
@@ -93,94 +104,97 @@ description: 検索結果や調査メモを、課題起点（現状→課題→A
 - [記事タイトル](https://example.com/path)
 ```
 
----
+## Section Rules
 
-## Section-Specific Constraints
+### 1. メタ情報
+
+- `作成日時` must use `YYYY-MM-DD`.
+- `入力概要` must be one concise line.
+- `トピック数` must equal the number of `###` topics in `## 7. トピック一覧`.
 
 ### 2. 概要
-- 全体像を1行以上で要約する
-- 「現状 → 課題 → 解決 → 価値」の流れを含める
 
-### 3. 現状（マクロ）
-- 業界・領域全体の現状を記述する
-- 必ず実例・実運用・観測事実を含める
-- 一般論は禁止
-- 箇条書きまたはテーブルで整理
+- Summarize the whole report in one or more bullets.
+- Include all four elements: current state, issue, AI solution, and value.
+
+### 3. 現状
+
+- Describe the macro-level industry or domain situation.
+- Move detailed product or technology descriptions to `## 7. トピック一覧`.
+- Include operational examples, observed facts, or public evidence with inline links.
 
 ### 4. 課題
-- 現状から導かれる課題を列挙する
-- 課題ID（C1, C2...）を必ず付与する
-- 以下の観点を優先的に含める
-  - AI精度
-  - 人手不足
-  - コスト
-  - データ不足
-- 現状との因果関係を維持する
+
+- Include only issues that directly follow from the current state.
+- Use `C1`, `C2`, `C3` as consecutive IDs.
+- Prefer issues about AI accuracy, labor shortage, cost, data shortage, and operational burden.
 
 ### 5. AI解決
-- 課題ID単位で対応関係を明示する
-- 各課題に対して以下を分類して記載
-  - OSS
-  - 研究
-  - 実運用事例
-- 「対応していること」が明確であること
-- 事実ベースのみ記述（推測禁止）
+
+- Map each solution block to an issue ID, such as `C1対応`.
+- Keep the sublabels `OSS`, `研究`, and `実運用`.
+- Write `該当なし` or `不明` when a category has no evidence.
+- Do not list solutions that do not address the issue.
 
 ### 6. 価値
-- 課題解決によって得られる価値を列挙する
-- 必ず以下のいずれかを含める
-  - 数値（例: 30%削減）
-  - 比較（例: 従来比2倍）
-  - 実例リンク
-- 課題との対応関係を維持する
 
-### 7. トピック一覧（ミクロ）
-- 個別技術・製品単位で記述する
-- 現状セクションとの重複は禁止
-- 必ず本文リンクを含める
+- Map each value block to an issue ID, such as `C1由来`.
+- Prefer reduction rate, saved time, accuracy, count, cost, or other numeric evidence.
+- If no number exists, use comparison or an evidence link.
+- Do not write unsupported effects.
+
+### 7. トピック一覧
+
+- Keep topic granularity consistent: technology, product, OSS, paper, or case study.
+- Start every topic with `### {トピック名}`.
+- Put at least one inline link in `概要`.
+- Put at least one child bullet under `特徴`.
 
 ### 8. 比較まとめ
-- 比較軸は固定
-  - 精度
-  - コスト
-  - 導入難易度
-  - 拡張性
-- 各トピックを同一基準で比較する
 
----
+- Keep the four fixed comparison axes: `精度`, `コスト`, `導入難易度`, `拡張性`.
+- Compare all topics using the same criteria.
+- Write `不明` when comparison evidence is missing.
 
-## Execution Procedure
+### 9. 更新履歴
 
-- 入力からトピック候補、数値、差分、URLを抽出
-- 業界レベルの現状（マクロ）を構築
-- 課題を抽出しIDを付与
-- 課題ごとにAI解決を紐付け
-- 価値を課題ベースで生成
-- トピックを技術単位で整理（ミクロ）
-- テンプレートに強制適合
-- 本文リンクを埋め込む
-- 参考リンク一覧を整合させる
+- For a new report, write `YYYY-MM-DD: 初版`.
+- For an update, write `YYYY-MM-DD: {更新内容}`.
 
----
+### 10. 参考リンク一覧
 
-## Pre-Submission Checklist
+- List only URLs used in inline body links.
+- Do not add URLs that do not appear in the body.
+- Do not use local file links, footnotes, or reference IDs.
 
-- 構造が「現状 → 課題 → AI解決 → 価値」になっている
-- 現状がマクロ、トピックがミクロで分離されている
-- 課題にIDが付与されている
-- 課題とAI解決が対応している
-- 価値が課題解決に紐づいている
-- トピックに本文リンクがある
-- 比較が固定軸で行われている
-- 注釈・脚注がない
-- 参考リンクが本文と一致
+## Workflow
 
----
+1. Read the input and extract URLs, numbers, dates, topics, and issue candidates.
+2. Build the macro-level `## 3. 現状`.
+3. Derive issues from the current state and assign `C1`, `C2`, `C3`.
+4. Classify solutions for each issue under `OSS`, `研究`, and `実運用`.
+5. Write value for each issue ID.
+6. Organize individual topics in `## 7. トピック一覧`.
+7. Write `## 8. 比較まとめ` using the fixed axes.
+8. Make body links and `## 10. 参考リンク一覧` consistent.
+9. Revise until all completion checks pass.
 
-## Prohibitions
+## Completion Checks
 
-- セクション構造の変更
-- 抽象的すぎる記述
-- 根拠なしの推測
-- 脚注・参照IDの使用
-- 課題と無関係な解決の列挙
+- `# レポート` exists.
+- `## 1` through `## 10` exist in the required order.
+- All Japanese headings match the template.
+- `## 4. 課題` uses `C1`, `C2`, `C3` issue IDs.
+- `## 5. AI解決` and `## 6. 価値` reuse the same issue IDs.
+- The reasoning flow is `現状 -> 課題 -> AI解決 -> 価値`.
+- Every topic summary has at least one inline link.
+- The reference link list matches body links.
+- There are no footnotes, citation IDs, reference IDs, or `file:///` links.
+
+## Do Not
+
+- Do not add, remove, merge, split, or reorder sections.
+- Do not invent facts, numbers, links, or impact.
+- Do not use unsupported speculation.
+- Do not list solutions unrelated to issue IDs.
+- Do not use footnotes, citations IDs, or reference IDs.

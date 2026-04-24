@@ -1,110 +1,125 @@
 ---
 name: report-fact-check
-description: レポート内容の事実性・参照整合性・品質を検証するスキル
+description: Use this skill to validate Japanese research reports and A4 summaries. It checks factual accuracy, numbers, dates, links, source quality, fixed report structure, C1/C2 issue-ID consistency, and missing evidence before or after using report-format-kri or report-format-a4.
 ---
 
 # report-fact-check
 
-## Usage
+## Purpose
 
-以下の場合に使用する：
+Validate a Japanese report and clearly identify what must be fixed.
 
-- レポートの品質確認
-- 事実性の担保
-- 参照整合性のチェック
+This skill is for review and validation only. Do not rewrite the whole report. When fixes are needed, report the issue and send the content back to the relevant formatting skill.
 
-使用しないケース：
+The validation report may be written in Japanese unless the user requests otherwise.
 
-- フォーマット生成
-- レポート構造作成
+## Targets
 
----
+- A `report-format-kri` 10-section report
+- A `report-format-a4` 5-section summary
+- An existing Japanese report
+- A draft created from research notes
 
-## Steps
+## Workflow
 
-### 1. 事実性チェック
+1. Check structure.
+2. Extract claims, numbers, dates, specifications, and comparisons.
+3. Check whether each important claim has an inline link or input evidence.
+4. Evaluate source quality.
+5. Check issue-ID consistency across 課題, AI解決, and 価値.
+6. Check consistency between body links and `参考リンク一覧`.
+7. Return `OK`, `要修正`, or `不明`.
 
-- 推測が含まれていないか確認
-- 不明な情報が適切に「不明」と記載されているか確認
+## Checks
 
----
+### 1. Structure
 
-### 2. 参照チェック
+- `report-format-kri` output has `## 1. メタ情報` through `## 10. 参考リンク一覧`.
+- `report-format-a4` output has only `## 要約`, `## 現状`, `## 課題`, `## 解決`, and `## 価値`.
+- No required heading is added, deleted, renamed, or reordered.
 
-- すべての記述に参照IDが付与されているか確認
-- 参照IDが一貫しているか確認
-- 同一ソースに対して同一IDが使用されているか確認
+### 2. Factuality
 
----
+- No unsupported assertion is written as fact.
+- Inferences are not mixed with verified facts.
+- Unverifiable information is marked as `不明`.
+- No information outside the input or cited evidence was added.
 
-### 3. ソース品質チェック
+### 3. Numbers, Dates, and Specifications
 
-- 単一ソースになっていないか確認
-- 公式のみになっていないか確認
+- Numbers, dates, specifications, performance, cost, and counts have evidence.
+- Units are clear.
+- If sources conflict, the adopted value and reason are clear.
 
----
+### 4. Links
 
-### 4. 数値・仕様チェック
+- Body links use normal Markdown links.
+- There are no footnotes, citation IDs, reference IDs, `[参照: ...]`, or `file:///` links.
+- `参考リンク一覧` matches URLs used in the body.
+- `参考リンク一覧` does not contain unused URLs.
 
-- 数値が記載されているか確認
-- 曖昧な表現がないか確認
+### 5. Issue IDs
 
----
+- Issues use consecutive IDs: `C1`, `C2`, `C3`.
+- `AI解決` has matching blocks for each issue ID.
+- `価値` has matching blocks for each issue ID.
+- No solution or value is unrelated to the issue it claims to address.
 
-### 5. トレーサビリティチェック
+### 6. Topic Granularity
 
-- すべての主張が参照元に紐づいているか確認
+- Topic granularity is consistent.
+- Technologies, products, companies, papers, and case studies are not mixed without a clear reason.
+- All items compared in `比較まとめ` also appear in `トピック一覧`.
 
----
+## Source Quality
 
-### 6. 完了判定
+- High: official documentation, papers, standards, GitHub repositories, technical vendor documents, government documents
+- Medium: technical media, specialist blogs, case-study articles
+- Low: unsourced articles, reposted content, social media, advertising-heavy pages
 
-以下を満たす場合のみOKとする：
+Claims supported only by low-quality sources should be marked `要修正` or `不明`.
 
-- 事実ベースである
-- 参照整合性がある
-- 未検証情報がない
-- 構造が崩れていない
+## Required Output Format
 
-### 7. ソース状態フラグ付与
+Return validation results in this Japanese format.
 
-- Fは以下を満たす場合のみ付与：
-  - 数値・主張・日付の検証が完了
-  - 他ソースと整合性が取れている
+```md
+## ファクトチェック結果
 
-満たさない場合：
+### 総合判定
+- 判定: OK / 要修正 / 不明
+- 理由:
 
-- Fは付与しない
+### 指摘事項
+- 重要度: 高 / 中 / 低
+- 箇所:
+- 問題:
+- 修正方針:
 
-### 8. 参照欠落検知
+### 構造チェック
+- report-format-kri / report-format-a4 準拠:
+- 見出し:
+- 課題 ID:
+- リンク整合:
 
-以下を検出する：
+### ソース品質
+- 高:
+- 中:
+- 低:
 
-- トピック単位で参照が存在しない
-- 比較対象が参照なしで出現している
+### 残課題
+- 
+```
 
-検出時：
+## Decision Rules
 
-- 該当箇所を「参照不足」と判定する
+- `OK`: no serious structure error, missing evidence, or link inconsistency remains.
+- `要修正`: there is a factual, structural, evidence, or link problem that should be fixed.
+- `不明`: the input or evidence is insufficient to judge.
 
-### 9. トピック整合性チェック
+## Do Not
 
-以下を確認する：
-
-- トピックの粒度が統一されているか
-  - 技術 / 製品 / 企業 が混在していないか
-
-混在している場合：
-
-- 「粒度不一致」と判定する
-
-### 10. 比較整合性チェック
-
-以下を確認する：
-
-- 比較セクションに登場する要素が
-  トピック一覧に存在するか
-
-存在しない場合：
-
-- 「比較不整合」と判定する
+- Do not state unsupported fixes as facts.
+- Do not mark low-quality-source-only claims as `OK`.
+- Do not ignore missing links.
+- Do not add information to an A4 summary that is absent from the source report.
