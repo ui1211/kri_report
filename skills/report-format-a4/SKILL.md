@@ -21,6 +21,8 @@ The final output must be written in Japanese. Do not translate the required Japa
 4. MUST preserve the flow: `現状 -> 課題 -> 解決 -> 価値`.
 5. `## 価値` MUST include a number, a comparison, or `定量効果なし`.
 6. If a section exceeds the character limit, summarize it again. Do not add a new section.
+7. MUST write each section as prose paragraphs, not bullet lists.
+8. MUST NOT start section content lines with `-`, `*`, numbered list markers, or checklist markers.
 
 ## Required Output Template
 
@@ -30,19 +32,19 @@ Keep this Japanese template exactly.
 # タイトル
 
 ## 要約
-- 
+本文を1段落で記載する。
 
 ## 現状
-- 
+本文を1段落で記載する。
 
 ## 課題
-- 
+本文を1段落で記載する。
 
 ## 解決
-- 
+本文を1段落で記載する。
 
 ## 価値
-- 
+本文を1段落で記載する。
 ```
 
 ## Character Limits
@@ -58,7 +60,7 @@ Keep this Japanese template exactly.
 
 ### 要約
 
-- Summarize the whole document in one short bullet or sentence.
+- Summarize the whole document in one short prose paragraph.
 - Include current state, issue, solution, and value.
 
 ### 現状
@@ -87,14 +89,17 @@ Keep this Japanese template exactly.
 
 1. Extract topic, current state, issues, solution, value, numbers, and URLs from the input.
 2. Assign each extracted item to one of the five sections.
-3. Fill the fixed template.
+3. Fill the fixed template with prose paragraphs, not bullets.
 4. Re-summarize any section that exceeds the character limit.
 5. Check that no information outside the input was added.
+6. Remove bullet markers if any section starts with `-`, `*`, `1.`, or checklist syntax.
 
 ## Completion Checks
 
 - The output has only `# タイトル` and the five required `##` headings.
 - The five section names and order match the template.
+- Each section body is prose, not a bullet list.
+- No section content line starts with `-`, `*`, a numbered list marker, or checklist syntax.
 - Every section is within the character limit.
 - `## 価値` has a number, comparison, or `定量効果なし`.
 - There are no footnotes, citation IDs, reference IDs, or `file:///` links.
@@ -103,6 +108,7 @@ Keep this Japanese template exactly.
 ## Do Not
 
 - Do not add, remove, merge, split, or reorder sections.
+- Do not use bullet lists, numbered lists, or checklists in the A4 summary body.
 - Do not invent facts, numbers, links, or impact.
 - Do not exceed character limits.
 - Do not write value without quantitative evidence, comparison, or `定量効果なし`.

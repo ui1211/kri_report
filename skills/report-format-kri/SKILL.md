@@ -39,6 +39,8 @@ Before writing, extract the following from the input:
 - Issues
 - AI, OSS, research, or production examples
 - Quantified effects or comparison points
+- Comparable metrics such as stars, license, accuracy, cost, speed, size, dates, or benchmark scores
+- GitHub repository facts such as repository link, stars, license, last update, and short description
 
 Do not fill missing items with guesses. Put `不明` or `該当なし` in the template when required information is missing.
 
@@ -88,11 +90,10 @@ The output must follow this template exactly. Keep the Japanese headings and lab
 - 制約 or 注意点:
 
 ## 8. 比較まとめ
-- 比較軸:
-  - 精度
-  - コスト
-  - 導入難易度
-  - 拡張性
+- 比較表:
+  | 対象 | 概要 | 精度 | コスト | 導入難易度 | 拡張性 | 主要数値 | 根拠 |
+  |---|---|---|---|---|---|---|---|
+  | {対象名} | 不明 | 不明 | 不明 | 不明 | 不明 | 不明 | [根拠](https://example.com/path) |
 - 違い:
 - 使い分け:
 - 強み / 弱み:
@@ -149,12 +150,19 @@ The output must follow this template exactly. Keep the Japanese headings and lab
 - Start every topic with `### {トピック名}`.
 - Put at least one inline link in `概要`.
 - Put at least one child bullet under `特徴`.
+- When a topic is a GitHub repository, include a Markdown table with repository name, link, stars, license, last update if available, and short description.
+- If GitHub stars or license are not available in the input/source, write `不明`. Do not guess.
 
 ### 8. 比較まとめ
 
-- Keep the four fixed comparison axes: `精度`, `コスト`, `導入難易度`, `拡張性`.
-- Compare all topics using the same criteria.
+- Use the comparison table as the primary output of this section.
+- Put fine-grained topic details into table columns instead of long prose or long bullet lists.
+- Keep the fixed comparison axes inside the table: `精度`, `コスト`, `導入難易度`, `拡張性`.
+- Add extra table columns when useful, such as `スター数`, `ライセンス`, `最終更新`, `速度`, `モデルサイズ`, `データセット`, `ベンチマーク`, or `制約`.
+- Compare all topics using the same columns whenever possible.
 - Write `不明` when comparison evidence is missing.
+- Include an inline evidence link in the table when a row contains source-backed facts.
+- Keep `違い`, `使い分け`, and `強み / 弱み` short. Do not repeat detailed per-topic descriptions outside the table.
 
 ### 9. 更新履歴
 
@@ -175,9 +183,10 @@ The output must follow this template exactly. Keep the Japanese headings and lab
 4. Classify solutions for each issue under `OSS`, `研究`, and `実運用`.
 5. Write value for each issue ID.
 6. Organize individual topics in `## 7. トピック一覧`.
-7. Write `## 8. 比較まとめ` using the fixed axes.
-8. Make body links and `## 10. 参考リンク一覧` consistent.
-9. Revise until all completion checks pass.
+7. Write GitHub repository tables in `## 7. トピック一覧` when GitHub repositories are included.
+8. Write `## 8. 比較まとめ` primarily as Markdown tables. Put comparable topic details into the tables instead of long bullet lists.
+9. Make body links and `## 10. 参考リンク一覧` consistent.
+10. Revise until all completion checks pass.
 
 ## Completion Checks
 
@@ -188,6 +197,8 @@ The output must follow this template exactly. Keep the Japanese headings and lab
 - `## 5. AI解決` and `## 6. 価値` reuse the same issue IDs.
 - The reasoning flow is `現状 -> 課題 -> AI解決 -> 価値`.
 - Every topic summary has at least one inline link.
+- `## 8. 比較まとめ` is primarily table-based, and comparable topic details are inside the table rather than scattered as long bullets.
+- GitHub repositories, when present, have repository link, stars, license, and summary in a Markdown table, using `不明` for missing values.
 - The reference link list matches body links.
 - There are no footnotes, citation IDs, reference IDs, or `file:///` links.
 

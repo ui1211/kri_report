@@ -28,7 +28,9 @@ The validation report may be written in Japanese unless the user requests otherw
 4. Evaluate source quality.
 5. Check issue-ID consistency across 課題, AI解決, and 価値.
 6. Check consistency between body links and `参考リンク一覧`.
-7. Return `OK`, `要修正`, or `不明`.
+7. Check whether comparable items and GitHub repositories are summarized in Markdown tables.
+8. For A4 summaries, check that section bodies are prose paragraphs, not bullet lists.
+9. Return `OK`, `要修正`, or `不明`.
 
 ## Checks
 
@@ -71,6 +73,21 @@ The validation report may be written in Japanese unless the user requests otherw
 - Technologies, products, companies, papers, and case studies are not mixed without a clear reason.
 - All items compared in `比較まとめ` also appear in `トピック一覧`.
 
+### 7. Comparison Tables
+
+- Comparable items in `比較まとめ` are organized in a Markdown table when two or more items can be compared.
+- Fine-grained topic comparisons are contained in table columns, not scattered across long bullet lists.
+- Numeric values such as stars, cost, accuracy, speed, date, size, or benchmark score appear in table columns when available.
+- GitHub repositories include repository link, stars, license, last update if available, and short description in a table.
+- Missing values are written as `不明`, not guessed.
+- Rows with source-backed facts include inline evidence links.
+
+### 8. A4 Prose Style
+
+- `report-format-a4` output is written as prose paragraphs.
+- A4 section content does not start with `-`, `*`, numbered list markers, or checklist markers.
+- A4 content is summarized in continuous Japanese sentences, not itemized bullets.
+
 ## Source Quality
 
 - High: official documentation, papers, standards, GitHub repositories, technical vendor documents, government documents
@@ -100,6 +117,8 @@ Return validation results in this Japanese format.
 - report-format-kri / report-format-a4 準拠:
 - 見出し:
 - 課題 ID:
+- 比較表:
+- A4文章形式:
 - リンク整合:
 
 ### ソース品質

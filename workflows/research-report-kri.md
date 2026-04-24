@@ -78,12 +78,13 @@ Do not rely only on low-quality sources for important claims.
 1. Determine task mode.
 2. Collect input material and sources.
 3. Extract topic, URLs, numbers, dates, current-state facts, issues, solutions, and value claims.
-4. Run `report-fact-check` criteria on important facts before writing.
-5. Generate `{topic}_レポート.md` with `report-format-kri`.
-6. Validate the report with `report-fact-check`.
-7. Generate `{topic}_A4_要約.md` with `report-format-a4`, using only the validated report as input.
-8. Validate the A4 summary with `report-fact-check`.
-9. Update `plan/CHANGELOG.md` when the workflow or skill design changed, not for ordinary report content changes.
+4. Extract comparable metrics such as stars, license, cost, accuracy, speed, dates, benchmark scores, and links.
+5. Run `report-fact-check` criteria on important facts before writing.
+6. Generate `{topic}_レポート.md` with `report-format-kri`.
+7. Validate the report with `report-fact-check`.
+8. Generate `{topic}_A4_要約.md` with `report-format-a4`, using only the validated report as input.
+9. Validate the A4 summary with `report-fact-check`.
+10. Update `plan/CHANGELOG.md` when the workflow or skill design changed, not for ordinary report content changes.
 
 ## Main Report Requirements
 
@@ -114,6 +115,11 @@ Rules:
 - Assign issues as `C1`, `C2`, `C3`.
 - Reuse issue IDs in `AI解決` and `価値`.
 - Preserve `現状 -> 課題 -> AI解決 -> 価値`.
+- Make `## 8. 比較まとめ` primarily table-based.
+- Put fine-grained topic details into comparison table columns instead of long bullet lists.
+- When GitHub repositories are included, summarize repository name, link, stars, license, last update if available, and overview in a Markdown table.
+- When numeric values exist, put them in comparison tables instead of leaving them only in prose.
+- Use `不明` for missing table values. Do not guess.
 
 ## A4 Summary Requirements
 
@@ -135,6 +141,8 @@ Rules:
 
 - Use only facts from the validated main report.
 - Do not add new information.
+- Write each section as prose paragraphs, not bullet lists.
+- Do not start A4 section content with `-`, `*`, numbered list markers, or checklist markers.
 - Keep the output short enough for an A4-style summary.
 - `## 価値` must include a number, comparison, or `定量効果なし`.
 
@@ -168,7 +176,10 @@ Finish only when all are true:
 - `{topic}_A4_要約.md` exists.
 - The main report has exactly the required 10 Japanese sections.
 - The A4 summary has exactly the required 5 Japanese sections.
+- The A4 summary is written as prose paragraphs, not bullet lists.
 - Body links and `## 10. 参考リンク一覧` are consistent.
+- `## 8. 比較まとめ` is primarily table-based, and detailed topic comparisons are contained in tables.
+- GitHub repositories have stars, links, license, and overview in a table, with `不明` for missing values.
 - No footnotes, reference IDs, citation IDs, or `file:///` links remain.
 - `report-fact-check` has no high-severity unresolved issues.
 - The A4 summary contains no information absent from the main report.
