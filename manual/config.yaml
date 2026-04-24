@@ -1,0 +1,67 @@
+name: Local Config
+version: 1.0.0
+schema: v1
+
+context:
+  - provider: file
+    params:
+      path: AGENTS.md
+
+mcpServers:
+  - name: context7
+    command: npx
+    args:
+      - "-y"
+      - "@upstash/context7-mcp"
+
+  - name: searxng
+    command: npx
+    args:
+      - "-y"
+      - "mcp-searxng"
+    env:
+      SEARXNG_URL: "http://localhost:8080"
+
+models:
+  # メイン（思考・会話）
+  - name: main
+    provider: ollama
+    model: qwen3.5:9b
+    roles: [chat]
+    defaultCompletionOptions:
+      contextLength: 16384
+
+  - name: translate
+    provider: ollama
+    model: translategemma
+    roles: [chat]
+
+  # Claude風（UX重視）
+  - name: chat-claude
+    provider: ollama
+    model: sorc/qwen3.5-claude-4.6-opus-q4:9b
+    roles: [chat]
+    defaultCompletionOptions:
+      contextLength: 16384
+
+  # コード（主力）
+  - name: coder
+    provider: ollama
+    model: qwen2.5-coder:14b
+    roles: [edit, apply]
+    defaultCompletionOptions:
+      contextLength: 16384
+
+  # 重い思考（詰まり用）
+  - name: heavy
+    provider: ollama
+    model: qwen3.5:27b
+    roles: [chat]
+    defaultCompletionOptions:
+      contextLength: 32768
+
+  # embedding（RAG用）
+  - name: embed
+    provider: ollama
+    model: nomic-embed-text
+    roles: [embed]
