@@ -1,3 +1,10 @@
+---
+marp: true
+theme: mytheme
+paginate: true
+headingDivider: 2
+---
+
 # 調査レポート頭紙
 
 ## 目的
