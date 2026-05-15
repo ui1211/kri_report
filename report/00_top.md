@@ -51,6 +51,15 @@ headingDivider: 2
 | pointcloud OSS | 2026-04-23 | 点群データの処理・可視化OSSについて、機能、メタデータ連携、Web可視化、ライセンス制約を比較した調査。 | [2026-04-22_pointcloud_oss.md](2026-04-22_pointcloud_oss.md) |
 | 画像認識 AI 異常検知の OSS と事例 | 2026-04-23 | 画像異常検知の方式、OSS候補、異常スコア運用、誤検知やしきい値設計の課題を整理した調査。 | [2026-04-23_画像認識 AI 異常検知 OSS 事例.md](2026-04-23_画像認識%20AI%20異常検知%20OSS%20事例.md) |
 | 異常定義とセンサー実装設計 | 2026-04-30 | 新規案件で使うため、異常定義・判断手法とセンサー設置・保護条件を論文・公的資料・事例ソース付きで表形式に蒸留した更新前提の資料。 | [2026-04-30_異常定義とセンサー実装設計.md](2026-04-30_異常定義とセンサー実装設計.md) |
+| n8n | 2026-05-02 | n8nのワークフロー自動化、セルフホスト、AIノード、競合比較、運用課題を整理した資料。 | [2026-05-02_n8n_レポート.md](2026-05-02_n8n_レポート.md) |
+| BigQuery IoTセンサーデータ Looker料金体系 | 2026-05-07 | IoTセンサーデータをBigQueryに集約し、Lookerで可視化する場合の料金、費用発生点、コスト抑制設計を整理した資料。 | [2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) |
+| ThingSpeak REST API調査とPython取得ラッパー設計 | 2026-05-14 | ThingSpeak REST APIからセンサーデータを取得し、生存確認、過去取得、定期取得、BigQuery upsert前処理へ接続する設計資料。 | [2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) |
+| 建築外壁の損傷判定基準 | 2026-05-15 | 建築外壁、タイル、シーリング固有の点検項目とAIラベル設計への落とし込みを整理した追加調査。 | [2026-05-15_建築外壁の損傷判定基準.md](2026-05-15_建築外壁の損傷判定基準.md) |
+| 屋外センサー材料 | 2026-05-15 | 屋外センサー筐体・材料・ガスケットについて、IP等級だけでは判断できない耐候性と腐食リスクを整理した追加調査。 | [2026-05-15_屋外センサー材料.md](2026-05-15_屋外センサー材料.md) |
+| センサー窓の設計 | 2026-05-15 | カメラ窓、通気膜、音響孔、防水透湿膜など、測定部の露出と保護を両立する設計論点を整理した追加調査。 | [2026-05-15_センサー窓の設計.md](2026-05-15_センサー窓の設計.md) |
+| 電源設計 | 2026-05-15 | 電池、太陽光、PoE、商用電源、UPSを現場条件・保守周期・欠測リスクの観点で整理した追加調査。 | [2026-05-15_電源設計.md](2026-05-15_電源設計.md) |
+| データ品質管理 | 2026-05-15 | 欠測、重複、外れ値、バイアス、ドリフト、校正、センサー交換後の連続性を整理した追加調査。 | [2026-05-15_データ品質管理.md](2026-05-15_データ品質管理.md) |
+| アノテーション仕様 | 2026-05-15 | 外壁・シーリング・漏水痕のラベル体系、レビュー手順、品質管理を整理した追加調査。 | [2026-05-15_アノテーション仕様.md](2026-05-15_アノテーション仕様.md) |
 
 ## 技術マップ
 
@@ -75,6 +84,10 @@ headingDivider: 2
 | ComfyUI・画像処理ワークフロー | 画像生成・処理の試作基盤。[ComfyUI](2026-04-04_ComfyUI.md) | - | - | - | ワークフロー型AI処理。[ComfyUI](2026-04-04_ComfyUI.md) |
 | ハーネス・評価ループ | AI開発運用の制御基盤。[ハーネス](2026-04-04_LLm%20ハーネス%20メタハーネス.md) | モデル評価・改善ループに有効。 | アラート精度の改善ループに有効。 | 可視化・処理パイプライン評価に有効。 | メタハーネスとステアリングループ。[ステアリングループ](2026-04-07_ハーネスエンジニアリングステアリングループ.md) |
 | 環境・災害予測AI | 維持管理のリスク予測に接続。[メガソーラーAI](2026-04-09_日本のメガソーラーの環境問題・災害防止に関する%20AI%20予測事例.md) | - | - | 地形・施設データ活用と接続。 | 予測AIの横断事例。[メガソーラーAI](2026-04-09_日本のメガソーラーの環境問題・災害防止に関する%20AI%20予測事例.md) |
+| ワークフロー自動化・AIエージェント | API、DB、通知、AI処理を業務フローへ接続。[n8n](2026-05-02_n8n_レポート.md) | 点検後の報告・通知・再確認依頼に接続可能。[n8n](2026-05-02_n8n_レポート.md) | センサー異常時の通知・チケット化に接続可能。[n8n](2026-05-02_n8n_レポート.md) | 点群処理後の共有・承認フローに接続可能。[n8n](2026-05-02_n8n_レポート.md) | AI Agent、LangChain nodes、Chat Triggerを含む自動化基盤。[n8n](2026-05-02_n8n_レポート.md) |
+| IoTデータ基盤・BI | センサー監視を継続分析・可視化へ接続。[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) | - | 漏水・配管センサーの時系列保存とダッシュボード化。[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) | - | Pub/Sub、BigQuery、Looker、BI Engineの費用設計。[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) |
+| ThingSpeak API取得・生存確認 | 小規模IoT実証のデータ取得入口。[ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) | - | センサー値、最終更新、過去データ取得に利用。[ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) | - | REST API、差分取得、BigQuery upsert前処理。[ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) |
+| 現場実装仕様の深掘り | 異常定義から設置・保守・データ品質へ接続。[異常定義](2026-04-30_異常定義とセンサー実装設計.md) | 建築外壁の点検項目とラベル設計。[外壁判定基準](2026-05-15_建築外壁の損傷判定基準.md) | センサー窓、電源、品質管理を設計。[センサー窓](2026-05-15_センサー窓の設計.md) | - | 材料、データ品質、アノテーション仕様を管理。[データ品質管理](2026-05-15_データ品質管理.md) |
 
 ### 技術・領域 相関ノードグラフ
 
@@ -93,6 +106,8 @@ flowchart TB
         C8[モデル評価・改善ループ]
         C9[異常定義・実行トリガー]
         C10[センサー設置・保護]
+        C11[データ取り込み・可視化]
+        C12[業務自動化・通知]
     end
 
     subgraph TECH[核技術]
@@ -107,6 +122,9 @@ flowchart TB
         HARNESS[ハーネス・評価基盤]
         DEF[異常定義・判定閾値]
         INSTALL[センサー設置・保護設計]
+        AUTO[ワークフロー自動化]
+        BI[IoTデータ基盤・BI]
+        TSAPI[ThingSpeak API取得]
     end
 
     subgraph DOMAIN[領域]
@@ -128,6 +146,9 @@ flowchart TB
         HARNESS_DOC[ハーネス関連]
         ENV_DOC[メガソーラーAI予測]
         DEF_DOC[異常定義とセンサー実装設計]
+        N8N_DOC[n8n]
+        BQ_DOC[BigQuery/Looker]
+        THING_DOC[ThingSpeak REST API]
     end
 
     CLS --- C1
@@ -146,6 +167,12 @@ flowchart TB
     DEF --- C2
     INSTALL --- C10
     INSTALL --- C7
+    AUTO --- C12
+    AUTO --- C5
+    BI --- C11
+    BI --- C4
+    TSAPI --- C11
+    TSAPI --- C10
 
     WALL --- C1
     WALL --- C3
@@ -164,6 +191,7 @@ flowchart TB
     CROSS --- C2
     CROSS --- C8
     CROSS --- C9
+    CROSS --- C12
 
     WALL_DOC --- WALL
     WALL_DOC --- SEG
@@ -180,6 +208,12 @@ flowchart TB
     ENV_DOC --- ENV
     DEF_DOC --- DEF
     DEF_DOC --- INSTALL
+    N8N_DOC --- AUTO
+    N8N_DOC --- C12
+    BQ_DOC --- BI
+    BQ_DOC --- LEAK
+    THING_DOC --- TSAPI
+    THING_DOC --- LEAK
 
     C1 --- C2
     C2 --- C6
@@ -188,6 +222,8 @@ flowchart TB
     C7 --- C8
     C9 --- C6
     C10 --- C7
+    C11 --- C4
+    C12 --- C6
 ```
 
 ## 市場マップ
@@ -207,6 +243,10 @@ flowchart TB
 | OSS導入・内製化 | コストと自由度の比較論点。[調査まとめ](2026-04-02_調査まとめ.md) | モデル・データセット選定が中心。[外壁データセット](2026-04-10_外壁劣化診断_データセット事例調査.md) | センサ製品との組み合わせが中心。[漏水検知](2026-04-10_漏水検知.md) | ライセンス・WebGL・大規模点群が論点。[pointcloud OSS](2026-04-22_pointcloud_oss.md) | OSSツール比較が中心。[画像解析可視化OSS](2026-04-09_画像解析可視化%20OSS%20一覧.md) |
 | AI開発効率化 | 試作・評価・改善の短縮が論点。[ハーネス](2026-04-04_LLm%20ハーネス%20メタハーネス.md) | 劣化モデルの評価ループに有効。[技術検証事例](2026-04-03_外壁劣化診断_技術検証事例調査.md) | アラート精度改善に有効。[漏水検知](2026-04-10_漏水検知.md) | 可視化パイプライン評価に有効。[pointcloud OSS](2026-04-22_pointcloud_oss.md) | LLM・ハーネス・ComfyUIで試作を支える。[ComfyUI](2026-04-04_ComfyUI.md) |
 | 環境・災害リスク | 予防保全の周辺市場。[メガソーラーAI](2026-04-09_日本のメガソーラーの環境問題・災害防止に関する%20AI%20予測事例.md) | - | - | 地形・施設データ活用と接続。 | 予測AIの横断事例。[メガソーラーAI](2026-04-09_日本のメガソーラーの環境問題・災害防止に関する%20AI%20予測事例.md) |
+| データ基盤・BI費用 | 導入後の継続費を読める形に分解。[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) | - | センサー件数、取得頻度、保存量、可視化頻度で費用が変動。[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) | - | クエリ量、PDT、aggregate awareness、BI Engineを設計。[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md) |
+| ワークフロー自動化・AIエージェント化 | 調査・通知・承認・報告を連結する導入論点。[n8n](2026-05-02_n8n_レポート.md) | 点検画像の確認依頼、報告書化、顧客通知に接続。[n8n](2026-05-02_n8n_レポート.md) | 異常アラート後の連絡、起票、再取得に接続。[n8n](2026-05-02_n8n_レポート.md) | 処理完了通知やレビュー依頼に接続。[n8n](2026-05-02_n8n_レポート.md) | AI Agent、RAG、API連携の運用設計が論点。[n8n](2026-05-02_n8n_レポート.md) |
+| IoTデータ取得・生存監視 | センサー停止とデータ異常を分離する導入論点。[ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) | - | last_data_age、最新値、過去再取得で監視品質を担保。[ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) | - | upsert前処理、重複排除、watermark管理が論点。[ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md) |
+| 現場運用・品質保証 | 現場で壊れず、測れ、後から説明できることが導入条件。[異常定義](2026-04-30_異常定義とセンサー実装設計.md) | 外壁固有の判定項目とレビュー手順が論点。[外壁判定基準](2026-05-15_建築外壁の損傷判定基準.md) | 電源、窓、材料、欠測・ドリフト管理が論点。[電源設計](2026-05-15_電源設計.md) | - | アノテーションとデータ品質の継続管理。[アノテーション仕様](2026-05-15_アノテーション仕様.md) |
 
 ### 市場 相関ノードグラフ
 
@@ -224,6 +264,8 @@ flowchart TB
         CM7[AI開発を回しやすくする]
         CM8[案件初期の判断基準を作る]
         CM9[現場実装条件を満たす]
+        CM10[継続費を制御する]
+        CM11[通知・起票・報告へ流す]
     end
 
     subgraph DRIVER[市場要因]
@@ -234,6 +276,8 @@ flowchart TB
         COST[導入コスト]
         TRIGGER[具体実行トリガー]
         FIELD[現場実装条件]
+        DATA_COST[データ基盤費用]
+        AUTO_DRIVER[自動化需要]
     end
 
     subgraph MARKET[市場・領域]
@@ -253,6 +297,9 @@ flowchart TB
         REPORT[LLM・レポート作成]
         LOOP[ハーネス・評価ループ]
         KNOWLEDGE[異常定義とセンサー実装設計]
+        DASHBOARD[BigQuery + Looker]
+        AUTOMATION[n8n]
+        IOT_API[ThingSpeak取得ラッパー]
     end
 
     AGING --- WALL_M
@@ -265,6 +312,8 @@ flowchart TB
     COST --- CM5
     TRIGGER --- CM8
     FIELD --- CM9
+    DATA_COST --- CM10
+    AUTO_DRIVER --- CM11
 
     WALL_M --- CM1
     WALL_M --- CM2
@@ -275,6 +324,7 @@ flowchart TB
     LEAK_M --- CM3
     LEAK_M --- CM6
     LEAK_M --- CM9
+    LEAK_M --- CM10
     ODOR_M --- CM3
     ODOR_M --- CM9
     P3D_M --- CM2
@@ -284,6 +334,7 @@ flowchart TB
     AI_M --- CM5
     AI_M --- CM7
     AI_M --- CM8
+    AI_M --- CM11
 
     SERVICE --- CM1
     SERVICE --- CM2
@@ -299,6 +350,12 @@ flowchart TB
     LOOP --- CM7
     KNOWLEDGE --- CM8
     KNOWLEDGE --- CM9
+    DASHBOARD --- CM10
+    DASHBOARD --- CM3
+    AUTOMATION --- CM11
+    AUTOMATION --- CM5
+    IOT_API --- CM3
+    IOT_API --- CM9
 
     CM1 --- CM5
     CM2 --- CM4
@@ -307,7 +364,26 @@ flowchart TB
     CM5 --- CM7
     CM8 --- CM6
     CM9 --- CM5
+    CM10 --- CM5
+    CM11 --- CM4
 ```
+
+## 最新確認メモ
+
+2026-05-15時点で、トップ資料に反映すべき新しい深掘り方向は、`センサー値をどう取るか`、`どう保存・可視化して費用を抑えるか`、`異常時に誰へ何を流すか` の3点に寄っている。
+
+- n8nは、従来のAPI連携ツールとしてだけでなく、AI Agent、LangChain nodes、Chat Triggerを組み合わせたAIワークフロー基盤として扱う。公式ドキュメント上も、Agent nodeはクエリに応じてツールを選択し、複数回実行しながら応答を作る構成が示されている。
+- Pub/Sub BigQuery subscriptionは、変換不要なメッセージならDataflow等のsubscriberを別途構成せずBigQueryへ書き込める。一方、公式ドキュメントではBigQuery subscriptionはat-least-onceであり、厳密な重複排除が必要な場合は下流BigQuery処理やDataflow側での対策が必要とされる。
+- ThingSpeakはREST APIだけでなく、TalkBack、Alerts、MQTTとの使い分けも調査余地がある。今回の既存資料は読み取り専用ラッパーに絞っているため、センサー制御・通知・画像チャネルまで含む運用設計は未調査である。
+
+参考: [n8n Advanced AI](https://docs.n8n.io/advanced-ai/)、[n8n Agent概念](https://docs.n8n.io/advanced-ai/examples/understand-agents/)、[Pub/Sub BigQuery subscription](https://docs.cloud.google.com/pubsub/docs/bigquery)、[BigQueryとLooker](https://docs.cloud.google.com/bigquery/docs/looker)、[ThingSpeak REST API](https://www.mathworks.com/help/thingspeak/rest-api.html)
+
+## 関連新規トピックス案
+
+| 優先 | トピック案 | 調査目的 | 主な確認観点 | 既存資料との接続 |
+| --- | --- | --- | --- | --- |
+| 1 | IoTセンサー監視のエンドツーエンド運用設計 | ThingSpeak、Pub/Sub、BigQuery、Looker、n8nをつなぎ、取得・保存・可視化・通知・再取得までの標準構成を作る。 | REST/MQTTの使い分け、重複排除、死活監視、遅延許容、BigQuery upsert、Looker更新頻度、n8n通知/起票、障害時リカバリ。 | [ThingSpeak](2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md)、[BigQuery/Looker](2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md)、[n8n](2026-05-02_n8n_レポート.md)、[異常定義](2026-04-30_異常定義とセンサー実装設計.md) |
+| 2 | AIエージェントによる点検・異常対応ワークフローの安全設計 | AI Agentを点検レポート、異常通知、再確認依頼、修繕判断補助に使う場合の権限・ログ・人確認・失敗時処理を整理する。 | n8n AI Agent、RAG、ツール実行権限、機密データ、承認ステップ、監査ログ、誤通知抑制、Redmine/Slack/メール連携、セキュリティ更新運用。 | [n8n](2026-05-02_n8n_レポート.md)、[LLMハーネス](2026-04-04_LLm%20ハーネス%20メタハーネス.md)、[ハーネスエンジニアリング](2026-04-07_ハーネスエンジニアリングステアリングループ.md)、[画像異常検知](2026-04-23_画像認識%20AI%20異常検知%20OSS%20事例.md) |
 
 ## ルール
 
