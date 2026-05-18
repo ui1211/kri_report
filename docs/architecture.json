@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "title": "KRI調査レポート アーキテクチャ資料",
+    "subtitle": "00_top.md を入口に、調査資料・技術領域・運用構成を一覧するための可視化データ",
+    "source": "report/00_top.md",
+    "updated": "2026-05-18",
+    "owner": "kri_report"
+  },
+  "overview": {
+    "purpose": "report/ 配下の調査レポートを、時系列ではなく技術領域、現場課題、運用構成から探せるようにする。",
+    "updateRule": "この JSON を更新すると、architecture.html の表示が再読み込み時に追従する。HTML の再生成は不要。",
+    "entrypoints": [
+      "report/00_top.md",
+      "docs/architecture.html",
+      "docs/architecture.json"
+    ]
+  },
+  "layers": [
+    {
+      "id": "source",
+      "name": "資料ソース",
+      "summary": "調査レポートと A4 要約を蓄積する層。可視化の一次情報は report/00_top.md と個別 Markdown。",
+      "items": ["report/*.md", "report/A4/*.md", "report/00_top.md"]
+    },
+    {
+      "id": "map",
+      "name": "技術・市場マップ",
+      "summary": "技術、領域、市場論点、共通項を横断して整理する層。",
+      "items": ["技術マップ", "市場相関ノードグラフ", "関連新規トピックス案"]
+    },
+    {
+      "id": "app",
+      "name": "可視化アプリ",
+      "summary": "JSON を読み込み、検索、フィルタ、構成図、詳細ペインで確認する静的 HTML。",
+      "items": ["docs/architecture.html", "docs/architecture.json"]
+    },
+    {
+      "id": "runtime",
+      "name": "起動・配信",
+      "summary": "Python 標準ライブラリだけで docs/ をローカル配信する。",
+      "items": ["scripts/serve_architecture.py", "start_architecture.bat"]
+    }
+  ],
+  "domains": [
+    {
+      "id": "market",
+      "name": "全体・市場",
+      "summary": "老朽化、人手不足、制度対応、導入判断、サービス化を扱う。",
+      "documents": ["2026-03-26_調査全体像.md", "07_市場動向と技術動向.md", "2026-04-02_調査まとめ.md"]
+    },
+    {
+      "id": "wall",
+      "name": "外壁・シーリング",
+      "summary": "外壁劣化、ひび割れ、剥離、浮き、シーリング劣化を扱う。",
+      "documents": ["01_外壁劣化診断.md", "03_シーリング劣化.md", "2026-05-15_建築外壁の損傷判定基準.md"]
+    },
+    {
+      "id": "leak",
+      "name": "漏水・配管",
+      "summary": "漏水、配管、音響・振動・圧力・流量センサー、現場監視を扱う。",
+      "documents": ["02_漏水検知.md", "2026-04-10_漏水検知.md", "2026-04-30_異常定義とセンサー実装設計.md"]
+    },
+    {
+      "id": "pointcloud",
+      "name": "点群・3D",
+      "summary": "点群、3D、BIM、Web 可視化、メタデータ連携を扱う。",
+      "documents": ["2026-04-22_pointcloud_oss.md", "2026-04-09_画像解析可視化 OSS 一覧.md"]
+    },
+    {
+      "id": "ai",
+      "name": "横断AI・OSS",
+      "summary": "画像異常検知、物体検出、OSS、評価、ワークフロー運用を扱う。",
+      "documents": ["06_AI判定手法の技術整理.md", "2026-04-23_画像認識 AI 異常検知 OSS 事例.md", "2026-05-18_AIエージェント異常対応ワークフロー.md"]
+    },
+    {
+      "id": "iot",
+      "name": "IoTデータ基盤",
+      "summary": "ThingSpeak、Pub/Sub、BigQuery、Looker、n8n を接続する運用基盤を扱う。",
+      "documents": ["2026-05-14_ThingSpeak_REST_API調査とPython取得ラッパー設計.md", "2026-05-07_BigQuery_IoTセンサーデータ_Looker料金体系.md", "2026-05-18_IoTセンサーデータ_エンドツーエンド基盤.md"]
+    }
+  ],
+  "components": [
+    {
+      "id": "top",
+      "name": "00_top.md",
+      "type": "document",
+      "domain": "market",
+      "summary": "調査資料の入口。ドキュメント一覧、技術マップ、相関ノードグラフ、更新ルールを持つ。",
+      "links": ["docs", "tech-map", "market-map"]
+    },
+    {
+      "id": "docs",
+      "name": "個別レポート",
+      "type": "document",
+      "domain": "market",
+      "summary": "外壁、漏水、AI、点群、IoT などの詳細調査 Markdown。",
+      "links": ["top", "tech-map"]
+    },
+    {
+      "id": "tech-map",
+      "name": "技術マップ",
+      "type": "knowledge",
+      "domain": "ai",
+      "summary": "技術を縦軸、領域を横軸にして、使いどころと参照資料を整理する。",
+      "links": ["top", "domains", "market-map"]
+    },
+    {
+      "id": "market-map",
+      "name": "市場相関ノードグラフ",
+      "type": "knowledge",
+      "domain": "market",
+      "summary": "市場要因、提供形態、共通項の関係を見るためのグラフ。",
+      "links": ["top", "topics", "workflow"]
+    },
+    {
+      "id": "thingspeak",
+      "name": "ThingSpeak取得",
+      "type": "integration",
+      "domain": "iot",
+      "summary": "PoC 向けのセンサーデータ取得入口。REST/MQTT などを調査対象にする。",
+      "links": ["bigquery", "quality"]
+    },
+    {
+      "id": "bigquery",
+      "name": "BigQuery保存",
+      "type": "data",
+      "domain": "iot",
+      "summary": "raw、clean、mart、alert_event を分け、重複排除と品質フラグを扱う。",
+      "links": ["looker", "quality", "n8n"]
+    },
+    {
+      "id": "looker",
+      "name": "Looker可視化",
+      "type": "ui",
+      "domain": "iot",
+      "summary": "センサー値、欠測率、最新受信時刻、品質指標を現場向けに表示する。",
+      "links": ["bigquery", "n8n"]
+    },
+    {
+      "id": "n8n",
+      "name": "n8n通知・起票",
+      "type": "workflow",
+      "domain": "ai",
+      "summary": "異常検知後の通知、人確認、起票、レポート化へ接続する。",
+      "links": ["looker", "agent", "redmine"]
+    },
+    {
+      "id": "agent",
+      "name": "AIエージェント",
+      "type": "workflow",
+      "domain": "ai",
+      "summary": "点検レポート、異常通知、再確認依頼、修繕判断補助に使う。権限、ログ、人確認が重要。",
+      "links": ["n8n", "quality"]
+    },
+    {
+      "id": "quality",
+      "name": "品質・異常定義",
+      "type": "governance",
+      "domain": "leak",
+      "summary": "欠測、重複、外れ値、ドリフト、校正、交換履歴を判断根拠として管理する。",
+      "links": ["bigquery", "agent", "tech-map"]
+    },
+    {
+      "id": "redmine",
+      "name": "Redmine作業管理",
+      "type": "ops",
+      "domain": "market",
+      "summary": "調査・開発タスクの起票、完了、レポート作成、コミット判断に使う運用口。",
+      "links": ["n8n"]
+    }
+  ],
+  "flows": [
+    {
+      "id": "report-flow",
+      "name": "資料更新フロー",
+      "steps": ["個別レポート追加", "00_top.md へ追記", "architecture.json へ反映", "architecture.html で確認"]
+    },
+    {
+      "id": "iot-flow",
+      "name": "IoT監視フロー",
+      "steps": ["ThingSpeak取得", "Pub/SubまたはAPI取り込み", "BigQuery保存", "Looker可視化", "n8n通知・起票", "人確認"]
+    },
+    {
+      "id": "ai-flow",
+      "name": "AI異常対応フロー",
+      "steps": ["異常スコア算出", "品質フラグ確認", "AIエージェント補助", "承認ステップ", "Redmine起票", "対応履歴保存"]
+    }
+  ],
+  "maintenance": [
+    {
+      "target": "docs/architecture.json",
+      "when": "構成、領域、コンポーネント、参照資料を増減したとき",
+      "effect": "HTML の表示に自動反映される"
+    },
+    {
+      "target": "report/00_top.md",
+      "when": "調査レポートを追加したとき",
+      "effect": "調査資料の正本として更新される"
+    },
+    {
+      "target": "docs/architecture.html",
+      "when": "表示機能や画面デザインを変えたいときだけ",
+      "effect": "通常の資料更新では触らない"
+    }
+  ]
+}

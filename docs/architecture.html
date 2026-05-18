@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>00_top.md 調査ナレッジマップ</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --panel: #fff;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee8;
+      --accent: #176b87;
+      --accent-soft: #e7f3f6;
+      --market: #8a5a14;
+      --tech: #3157a3;
+      --topic: #7a3f85;
+      --report: #2f6f4e;
+      --shadow: 0 10px 28px rgba(23, 32, 51, .08);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", "Yu Gothic UI", "Meiryo", sans-serif;
+    }
+    .app {
+      display: grid;
+      grid-template-columns: minmax(440px, 48vw) minmax(0, 1fr);
+      min-height: 100vh;
+      gap: 14px;
+      padding: 14px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .map-pane {
+      position: sticky;
+      top: 14px;
+      height: calc(100vh - 28px);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+    }
+    .map-head, .side-head, .section { padding: 14px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: 22px; margin-bottom: 6px; letter-spacing: 0; }
+    h2 { font-size: 17px; margin-bottom: 10px; }
+    h3 { font-size: 15px; margin-bottom: 6px; }
+    p { line-height: 1.7; }
+    .muted { color: var(--muted); }
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .settings-button {
+      width: 40px;
+      min-width: 40px;
+      padding: 0;
+      font-size: 18px;
+    }
+    .map-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .map-tools button {
+      min-height: 32px;
+      padding: 5px 10px;
+    }
+    input, select, button {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      padding: 7px 9px;
+    }
+    button {
+      cursor: pointer;
+      background: var(--accent-soft);
+      border-color: #b9d5dd;
+      color: #114c60;
+      font-weight: 600;
+    }
+    .graph-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      background: #fbfcfd;
+      cursor: grab;
+      touch-action: none;
+    }
+    .graph-wrap.paper { background: #fbfcfd; }
+    .graph-wrap.white { background: #fff; }
+    .graph-wrap.blueprint {
+      background-color: #f4fbff;
+      background-image:
+        linear-gradient(#d7eaf2 1px, transparent 1px),
+        linear-gradient(90deg, #d7eaf2 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .graph-wrap.dark {
+      background: #101828;
+    }
+    .graph-wrap.dark .group-label,
+    .graph-wrap.dark .node text { fill: #e5edf8; }
+    .graph-wrap.dragging { cursor: grabbing; }
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 620px;
+      user-select: none;
+    }
+    .edge {
+      stroke: #a4afbd;
+      stroke-width: 1.2;
+      opacity: .42;
+      transition: opacity .18s ease, stroke-width .18s ease, stroke .18s ease;
+    }
+    .edge.dim { opacity: .12; }
+    .edge.related {
+      stroke: var(--accent);
+      stroke-width: 2.8;
+      opacity: .95;
+      stroke-dasharray: 8 6;
+      animation: edge-flow 1.1s linear infinite;
+    }
+    @keyframes edge-flow {
+      to { stroke-dashoffset: -28; }
+    }
+    .node { cursor: pointer; }
+    .node rect { stroke: #afbac8; stroke-width: 1.1; rx: 8; }
+    .node.report rect { fill: #edf8f1; stroke: #9ac7aa; }
+    .node.domain rect { fill: #e7f3f6; stroke: #9ac7d2; }
+    .node.technology rect { fill: #eef3ff; stroke: #9bb0dd; }
+    .node.market rect { fill: #fff4e5; stroke: #d4b27b; }
+    .node.topic rect { fill: #f7ecfa; stroke: #cda4d5; }
+    .node.active rect { stroke: var(--ink); stroke-width: 2.4; }
+    .node.viewing rect {
+      stroke: #d14f00;
+      stroke-width: 3;
+      animation: node-pulse 1.25s ease-in-out infinite;
+    }
+    .node.history rect {
+      fill: #fff0d9;
+      stroke: #c05b13;
+      stroke-width: 3;
+      stroke-dasharray: 9 5;
+      animation: history-pulse 1.45s ease-in-out infinite;
+    }
+    @keyframes node-pulse {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(209, 79, 0, 0)); }
+      50% { filter: drop-shadow(0 0 10px rgba(209, 79, 0, .45)); }
+    }
+    @keyframes history-pulse {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(192, 91, 19, 0)); }
+      50% { filter: drop-shadow(0 0 12px rgba(192, 91, 19, .52)); }
+    }
+    .node.related rect {
+      stroke: var(--accent);
+      stroke-width: 2;
+      filter: drop-shadow(0 4px 7px rgba(23, 107, 135, .18));
+    }
+    .node.dim { opacity: .52; }
+    .node text { pointer-events: none; fill: var(--ink); font-size: 12px; }
+    .history-badge {
+      fill: #c05b13;
+      stroke: #fff;
+      stroke-width: 2;
+    }
+    .node text.history-badge-text {
+      fill: #fff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .node.report text { font-size: 11px; }
+    .group-label { fill: var(--muted); font-size: 13px; font-weight: 700; }
+    .settings-panel {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 10px 26px rgba(23, 32, 51, .14);
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .dialog-head,
+    .dialog-body,
+    .dialog-actions {
+      padding: 14px;
+    }
+    .dialog-head {
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .dialog-body {
+      display: grid;
+      gap: 12px;
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      border-top: 1px solid var(--line);
+    }
+    .main {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 14px;
+      min-width: 0;
+    }
+    .side-head {
+      display: grid;
+      gap: 12px;
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .content {
+      overflow: auto;
+      min-height: 0;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef1f5;
+      color: #344054;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+    .chip.report { background: #edf8f1; color: var(--report); }
+    .chip.domain { background: var(--accent-soft); color: var(--accent); }
+    .chip.technology { background: #eef3ff; color: var(--tech); }
+    .chip.market { background: #fff4e5; color: var(--market); }
+    .chip.topic { background: #f7ecfa; color: var(--topic); }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+    .card p { color: var(--muted); margin-bottom: 10px; }
+    .split {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .markdown-section {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+    .markdown-section:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+    .md-block { line-height: 1.75; color: #2d3648; }
+    .md-block code {
+      padding: 2px 5px;
+      border-radius: 4px;
+      background: #eef1f5;
+      color: #101828;
+    }
+    pre {
+      overflow: auto;
+      padding: 12px;
+      border-radius: 8px;
+      background: #101828;
+      color: #f8fafc;
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 760px;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 9px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    th { position: sticky; top: 0; background: #f8fafc; text-align: left; }
+    a { color: var(--accent); }
+    mark { background: #fff2a8; border-radius: 3px; padding: 0 2px; }
+    .hidden { display: none; }
+    .empty { color: var(--muted); padding: 16px; }
+    @media (max-width: 1040px) {
+      .app { grid-template-columns: 1fr; }
+      .map-pane { position: static; height: 62vh; }
+      .controls { grid-template-columns: 1fr; }
+      .settings-button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="panel map-pane">
+      <div class="map-head">
+        <h1>調査ナレッジマップ</h1>
+        <p class="muted" id="subtitle">00_top.md を読み込み中...</p>
+        <div class="controls">
+          <input id="query" type="search" placeholder="レポート、技術、領域を検索">
+          <button id="open-settings" class="settings-button" type="button" aria-label="マップ設定">⚙</button>
+        </div>
+      </div>
+      <div class="graph-wrap paper" id="graph-wrap">
+        <svg id="knowledge-map" role="img" aria-label="レポート関連マップ"></svg>
+      </div>
+
+      <section id="map-settings" class="settings-panel hidden" aria-label="map settings">
+      <div class="dialog-head">
+        <h2>マップ設定</h2>
+        <button id="close-settings-x" type="button">閉じる</button>
+      </div>
+      <div class="dialog-body">
+        <div class="field">
+          <label for="map-mode">表示傾向</label>
+          <select id="map-mode">
+            <option value="all">全体</option>
+            <option value="domain">領域中心</option>
+            <option value="technology">技術中心</option>
+            <option value="market">市場中心</option>
+            <option value="topic">次の調査</option>
+            <option value="report">レポートのみ</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="node-type">ノード種別</label>
+          <select id="node-type">
+            <option value="">全ノード</option>
+            <option value="report">レポート</option>
+            <option value="domain">領域</option>
+            <option value="technology">技術</option>
+            <option value="market">市場</option>
+            <option value="topic">トピック</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="map-background">背景</label>
+          <select id="map-background">
+            <option value="paper">標準</option>
+            <option value="white">白</option>
+            <option value="blueprint">方眼</option>
+            <option value="dark">ダーク</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="history-depth">過去ノードの追跡数</label>
+          <select id="history-depth">
+            <option value="0">表示しない</option>
+            <option value="1" selected>1個前まで</option>
+            <option value="2">2個前まで</option>
+            <option value="3">3個前まで</option>
+            <option value="5">5個前まで</option>
+          </select>
+        </div>
+        <div class="map-tools">
+          <button id="zoom-in" type="button">拡大</button>
+          <button id="zoom-out" type="button">縮小</button>
+          <button id="zoom-reset" type="button">ズームリセット</button>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button id="close-settings" type="button">完了</button>
+      </div>
+      </section>
+    </section>
+
+    <section class="main">
+      <header class="panel side-head">
+        <div>
+          <h1 id="title">00_top.md インタラクティブ表示サイト</h1>
+          <p class="muted">左のマップからレポートやタグを選ぶと、ここに本文・所属・関連が表示されます。</p>
+        </div>
+        <div class="tabs">
+          <button class="tab active" data-view="dashboard" type="button">ダッシュボード</button>
+          <button class="tab" data-view="reader" type="button">レポート閲覧</button>
+          <button class="tab" data-view="tables" type="button">整理テーブル</button>
+          <button class="tab" data-view="top" type="button">00_top本文</button>
+        </div>
+      </header>
+
+      <main class="panel content">
+        <section class="section" data-pane="dashboard">
+          <h2>現在の調査状況</h2>
+          <div class="split" id="dashboard"></div>
+        </section>
+
+        <section class="section hidden" data-pane="reader">
+          <div id="reader"></div>
+        </section>
+
+        <section class="section hidden" data-pane="tables">
+          <h2>技術マップ</h2>
+          <div id="tech-tables"></div>
+          <h2>市場マップ</h2>
+          <div id="market-tables"></div>
+          <h2>関連新規トピックス案</h2>
+          <div id="topic-tables"></div>
+        </section>
+
+        <section class="section hidden" data-pane="top">
+          <h2>00_top.md 本文</h2>
+          <div id="top-markdown"></div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <script>
+    const state = {
+      data: null,
+      selectedNode: null,
+      selectedReport: null,
+      mapScale: 1,
+      mapX: 0,
+      mapY: 0,
+      dragging: false,
+      dragStart: null,
+      nodeHistory: [],
+      historyDepth: 1,
+      view: "dashboard"
+    };
+
+    const byId = (id) => document.getElementById(id);
+    const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[char]));
+    const normalize = (value) => String(value ?? "").toLowerCase();
+    const graph = () => state.data.markdown.knowledgeGraph;
+    const nodeById = () => Object.fromEntries(graph().nodes.map((node) => [node.id, node]));
+
+    function q() {
+      return normalize(byId("query").value.trim());
+    }
+
+    function chip(text, type = "") {
+      return `<span class="chip ${esc(type)}">${esc(text)}</span>`;
+    }
+
+    function highlight(html) {
+      const raw = byId("query").value.trim();
+      if (!raw) return html;
+      const escaped = raw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return html.replace(new RegExp(`(${escaped})`, "gi"), "<mark>$1</mark>");
+    }
+
+    function reportKey(href) {
+      if (/^https?:\/\//.test(href)) return "";
+      const raw = href.split("#", 1)[0].replace(/^\.\.\/report\//, "");
+      try { return decodeURIComponent(raw); } catch { return raw; }
+    }
+
+    function renderInline(value) {
+      let html = esc(value);
+      html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, href) => {
+        const key = reportKey(href);
+        if (key && state.data.markdown.reports[key]) {
+          return `<a href="#" data-report="${esc(key)}">${esc(label)}</a>`;
+        }
+        const url = /^https?:\/\//.test(href) ? href : `../report/${href}`;
+        return `<a href="${esc(url)}" target="_blank" rel="noreferrer">${esc(label)}</a>`;
+      });
+      return highlight(html);
+    }
+
+    function visibleNodes() {
+      const mode = byId("map-mode").value;
+      const type = byId("node-type").value;
+      const query = q();
+      const edges = graph().edges;
+      const connectedReportIds = new Set();
+      const focusTypes = mode === "all" ? ["domain", "technology", "market", "topic", "report"] :
+        mode === "report" ? ["report"] : [mode, "report"];
+      for (const edge of edges) {
+        const source = nodeById()[edge.source];
+        const target = nodeById()[edge.target];
+        if (!source || !target) continue;
+        if (focusTypes.includes(source.type) || focusTypes.includes(target.type)) {
+          if (source.type === "report") connectedReportIds.add(source.id);
+          if (target.type === "report") connectedReportIds.add(target.id);
+        }
+      }
+      return graph().nodes.filter((node) => {
+        if (type && node.type !== type) return false;
+        if (!focusTypes.includes(node.type)) return false;
+        if (mode !== "all" && node.type === "report" && !connectedReportIds.has(node.id)) return false;
+        if (query && !normalize(`${node.label} ${node.summary || ""} ${node.domain || ""}`).includes(query)) return false;
+        return true;
+      });
+    }
+
+    function hashValue(value) {
+      let hash = 0;
+      for (let index = 0; index < value.length; index += 1) {
+        hash = ((hash << 5) - hash) + value.charCodeAt(index);
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    }
+
+    function layoutNodes(nodes) {
+      const mode = byId("map-mode").value;
+      const groups = ["domain", "technology", "market", "topic", "report"];
+      const grouped = Object.fromEntries(groups.map((group) => [group, []]));
+      for (const node of nodes) {
+        (grouped[node.type] ||= []).push(node);
+      }
+      const positions = {};
+      const center = { x: 620, y: 520 };
+      const typeOrder = mode === "all"
+        ? ["domain", "technology", "market", "topic", "report"]
+        : mode === "report"
+          ? ["report"]
+          : [mode, "report"];
+      const bands = mode === "all"
+        ? {
+            domain: { radius: 82, start: -0.55, sweep: Math.PI * 2 },
+            technology: { radius: 210, start: -2.75, sweep: 2.25 },
+            market: { radius: 245, start: -0.35, sweep: 1.65 },
+            topic: { radius: 315, start: 1.2, sweep: .75 },
+            report: { radius: 390, start: 0, sweep: Math.PI * 2 }
+          }
+        : {
+            [mode]: { radius: 150, start: 0, sweep: Math.PI * 2 },
+            report: { radius: 360, start: 0, sweep: Math.PI * 2 }
+          };
+
+      function placePolar(items, group, spec) {
+        const minArc = group === "report" ? 142 : 126;
+        const ringGap = group === "report" ? 112 : 96;
+        let index = 0;
+        let ring = 0;
+        while (index < items.length) {
+          const radius = spec.radius + ring * ringGap;
+          const capacity = Math.max(1, Math.floor((Math.max(spec.sweep, .6) * radius) / minArc));
+          const ringItems = items.slice(index, index + capacity);
+          ringItems.forEach((node, localIndex) => {
+            const count = Math.max(ringItems.length, 1);
+            const slot = (localIndex + .5) / count;
+            const baseAngle = spec.start + spec.sweep * slot;
+            const seed = hashValue(`${node.id}:${ring}`);
+            const angleJitter = (((seed % 100) / 100) - .5) * Math.min(.22, spec.sweep / Math.max(count, 1) * .55);
+            const radiusJitter = ((hashValue(node.label) % 46) - 23);
+            const angle = baseAngle + angleJitter;
+            const r = radius + radiusJitter;
+            positions[node.id] = {
+              x: center.x + Math.cos(angle) * r,
+              y: center.y + Math.sin(angle) * r
+            };
+          });
+          index += capacity;
+          ring += 1;
+        }
+      }
+
+      typeOrder.forEach((group) => {
+        const items = [...(grouped[group] || [])];
+        items.sort((a, b) => a.label.localeCompare(b.label, "ja"));
+        placePolar(items, group, bands[group] || { radius: 260, start: 0, sweep: Math.PI * 2 });
+      });
+      return { positions, groups: typeOrder, height: 1100, width: 1240, center };
+    }
+
+    function mapTransform() {
+      return `translate(${state.mapX} ${state.mapY}) scale(${state.mapScale})`;
+    }
+
+    function reportNodeId(key) {
+      const node = graph().nodes.find((item) => item.type === "report" && item.key === key);
+      return node?.id || null;
+    }
+
+    function viewingNodeId() {
+      if (state.view === "reader" && state.selectedReport) return reportNodeId(state.selectedReport);
+      if (state.view === "dashboard" && state.selectedNode) return state.selectedNode;
+      return null;
+    }
+
+    function rememberViewedNode(id) {
+      if (!id || state.nodeHistory[0] === id) return;
+      state.nodeHistory = [id, ...state.nodeHistory.filter((item) => item !== id)].slice(0, 12);
+    }
+
+    function visibleHistoryIds(currentId) {
+      return state.nodeHistory
+        .filter((id) => id !== currentId)
+        .slice(0, state.historyDepth);
+    }
+
+    function renderKnowledgeMap() {
+      const svg = byId("knowledge-map");
+      const nodes = visibleNodes();
+      const ids = new Set(nodes.map((node) => node.id));
+      const edges = graph().edges.filter((edge) => ids.has(edge.source) && ids.has(edge.target));
+      const { positions, groups, height, width, center } = layoutNodes(nodes);
+      const labels = { report: "レポート", domain: "領域", technology: "技術", market: "市場", topic: "次の調査" };
+      const focusId = viewingNodeId() || state.selectedNode;
+      const historyIds = visibleHistoryIds(focusId);
+      const relatedIds = new Set(focusId ? connectedNodes(focusId).map((node) => node.id) : []);
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+      const ringLabels = groups.map((group, index) => {
+        const y = 28 + index * 20;
+        return `<text class="group-label" x="18" y="${y}">${esc(labels[group] || group)}</text>`;
+      }).join("");
+      const graphBody = edges.map((edge) => {
+        const a = positions[edge.source];
+        const b = positions[edge.target];
+        if (!a || !b) return "";
+        const isRelated = focusId && (edge.source === focusId || edge.target === focusId);
+        const edgeClass = focusId ? (isRelated ? "edge related" : "edge dim") : "edge";
+        return `<line class="${edgeClass}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"></line>`;
+      }).join("") + nodes.map((node) => {
+        const p = positions[node.id];
+        const w = node.type === "report" ? 150 : 132;
+        const h = node.type === "report" ? 36 : 42;
+        const active = state.selectedNode === node.id ? "active" : "";
+        const viewing = viewingNodeId() === node.id ? "viewing" : "";
+        const historyIndex = historyIds.indexOf(node.id);
+        const history = historyIndex >= 0 ? "history" : "";
+        const related = relatedIds.has(node.id) ? "related" : "";
+        const dim = focusId && !active && !viewing && !history && !related ? "dim" : "";
+        return `
+          <g class="node ${esc(node.type)} ${active} ${viewing} ${history} ${related} ${dim}" data-node="${esc(node.id)}" transform="translate(${p.x - w / 2}, ${p.y - h / 2})" opacity="${historyIndex >= 0 ? Math.max(.7, .96 - historyIndex * .1) : 1}">
+            <rect width="${w}" height="${h}"></rect>
+            <text x="${w / 2}" y="${h === 36 ? 15 : 17}" text-anchor="middle">${esc(node.label).slice(0, node.type === "report" ? 17 : 16)}</text>
+            <text x="${w / 2}" y="${h === 36 ? 29 : 33}" text-anchor="middle">${esc(node.type === "report" ? node.date || node.domain || "" : labels[node.type] || node.type)}</text>
+            ${historyIndex >= 0 ? `<circle class="history-badge" cx="${w - 8}" cy="8" r="11"></circle><text class="history-badge-text" x="${w - 8}" y="12" text-anchor="middle">${historyIndex + 1}</text>` : ""}
+          </g>`;
+      }).join("");
+      svg.innerHTML = `${ringLabels}<g id="map-viewport" transform="${mapTransform()}">${graphBody}</g><circle cx="${center.x}" cy="${center.y}" r="3" fill="#667085"></circle>`;
+      svg.querySelectorAll(".node").forEach((node) => {
+        node.addEventListener("click", () => selectNode(node.dataset.node));
+      });
+    }
+
+    function connectedNodes(id) {
+      const ids = new Set();
+      for (const edge of graph().edges) {
+        if (edge.source === id) ids.add(edge.target);
+        if (edge.target === id) ids.add(edge.source);
+      }
+      return [...ids].map((nodeId) => nodeById()[nodeId]).filter(Boolean);
+    }
+
+    function selectNode(id) {
+      const node = nodeById()[id];
+      if (!node) return;
+      rememberViewedNode(viewingNodeId() || state.selectedNode);
+      state.selectedNode = id;
+      if (node.type === "report") {
+        state.selectedReport = node.key;
+        renderReader();
+        setView("reader");
+      } else {
+        renderDashboard();
+        setView("dashboard");
+      }
+      renderKnowledgeMap();
+    }
+
+    function renderMapDetail() {
+      const target = byId("map-detail");
+      if (!target) return;
+      const node = nodeById()[state.selectedNode];
+      if (!node) {
+        target.innerHTML = "ノードを選択すると、所属タグや関連レポートを表示します。";
+        return;
+      }
+      const connected = connectedNodes(node.id);
+      target.innerHTML = `
+        <h3>${esc(node.label)}</h3>
+        <div class="chips">${chip(node.type, node.type)}${node.domain ? chip(node.domain, "domain") : ""}</div>
+        <p class="muted">${esc(node.summary || "")}</p>
+        <div class="chips">${connected.slice(0, 8).map((item) => chip(item.label, item.type)).join("")}</div>`;
+    }
+
+    function renderDashboard() {
+      const nodes = graph().nodes;
+      const selected = nodeById()[state.selectedNode];
+      const connected = selected ? connectedNodes(selected.id) : [];
+      const reports = selected
+        ? connected.filter((node) => node.type === "report")
+        : nodes.filter((node) => node.type === "report").slice(0, 12);
+      const tags = selected
+        ? connected.filter((node) => node.type !== "report")
+        : nodes.filter((node) => node.type !== "report").slice(0, 20);
+      byId("dashboard").innerHTML = `
+        <article class="card">
+          <h3>選択中</h3>
+          <p>${selected ? esc(selected.label) : "未選択"}</p>
+          <div class="chips">${selected ? chip(selected.type, selected.type) : chip("マップから選択")}</div>
+        </article>
+        <article class="card">
+          <h3>関連レポート</h3>
+          ${reports.map((report) => `<p><a href="#" data-report="${esc(report.key)}">${esc(report.label)}</a></p>`).join("") || "<p>該当なし</p>"}
+        </article>
+        <article class="card">
+          <h3>関連タグ</h3>
+          <div class="chips">${tags.map((tag) => chip(tag.label, tag.type)).join("") || chip("該当なし")}</div>
+        </article>
+        <article class="card">
+          <h3>網羅性</h3>
+          <p>レポート ${nodes.filter((node) => node.type === "report").length} 件 / 領域 ${nodes.filter((node) => node.type === "domain").length} / 技術 ${nodes.filter((node) => node.type === "technology").length} / 市場 ${nodes.filter((node) => node.type === "market").length}</p>
+        </article>`;
+    }
+
+    function renderMarkdownBlock(block) {
+      if (block.type === "paragraph") {
+        const lines = block.text.split("\n");
+        const isList = lines.every((line) => /^[-*]\s+/.test(line.trim()));
+        if (isList) {
+          return `<ul class="md-block">${lines.map((line) => `<li>${renderInline(line.replace(/^[-*]\s+/, ""))}</li>`).join("")}</ul>`;
+        }
+        return `<p class="md-block">${renderInline(block.text).replace(/\n/g, "<br>")}</p>`;
+      }
+      if (block.type === "table") return renderTable(block);
+      if (block.type === "code") return `<pre><code>${esc(block.text)}</code></pre>`;
+      return "";
+    }
+
+    function renderReader() {
+      const reports = state.data.markdown.reports;
+      const key = state.selectedReport || Object.keys(reports)[0];
+      const report = reports[key];
+      if (!report) {
+        byId("reader").innerHTML = `<div class="empty">レポートを選択してください。</div>`;
+        return;
+      }
+      state.selectedReport = key;
+      const reportNode = graph().nodes.find((node) => node.type === "report" && node.key === key);
+      if (state.view === "reader" && reportNode) state.selectedNode = reportNode.id;
+      const tags = reportNode ? connectedNodes(reportNode.id).filter((node) => node.type !== "report") : [];
+      byId("reader").innerHTML = `
+        <div class="card">
+          <h2>${esc(reportNode?.label || report.label || key)}</h2>
+          <p>${esc(reportNode?.summary || "")}</p>
+          <div class="chips">${chip(key, "report")}${tags.map((tag) => chip(tag.label, tag.type)).join("")}</div>
+        </div>
+        ${report.sections.map((section) => `
+          <article class="markdown-section">
+            <h${Math.min(section.level, 4)}>${esc(section.title)}</h${Math.min(section.level, 4)}>
+            ${section.blocks.map(renderMarkdownBlock).join("")}
+          </article>`).join("")}`;
+    }
+
+    function renderTable(table) {
+      if (!table) return `<div class="empty">表がありません。</div>`;
+      const rows = table.rows.filter((row) => !q() || normalize(JSON.stringify(row)).includes(q()));
+      return `<div class="table-wrap"><table>
+        <thead><tr>${table.headers.map((header) => `<th>${esc(header)}</th>`).join("")}</tr></thead>
+        <tbody>${rows.map((row) => `<tr>${table.headers.map((header) => `<td>${renderInline(row[header] || "")}</td>`).join("")}</tr>`).join("")}</tbody>
+      </table></div>`;
+    }
+
+    function renderTables() {
+      const md = state.data.markdown;
+      byId("tech-tables").innerHTML = (md.techTables || []).map(renderTable).join("") || `<div class="empty">技術マップがありません。</div>`;
+      byId("market-tables").innerHTML = (md.marketTables || []).map(renderTable).join("") || `<div class="empty">市場マップがありません。</div>`;
+      byId("topic-tables").innerHTML = (md.topicTables || []).map(renderTable).join("") || `<div class="empty">関連トピックがありません。</div>`;
+    }
+
+    function renderTopMarkdown() {
+      const sections = state.data.markdown.sections.filter((section) => !q() || normalize(section.text).includes(q()));
+      byId("top-markdown").innerHTML = sections.map((section) => `
+        <article class="markdown-section">
+          <h${Math.min(section.level, 4)}>${esc(section.title)}</h${Math.min(section.level, 4)}>
+          ${section.blocks.map(renderMarkdownBlock).join("")}
+        </article>`).join("");
+    }
+
+    function setView(view) {
+      state.view = view;
+      document.querySelectorAll("[data-pane]").forEach((pane) => pane.classList.toggle("hidden", pane.dataset.pane !== view));
+      document.querySelectorAll(".tab").forEach((tab) => tab.classList.toggle("active", tab.dataset.view === view));
+      if (view === "reader" && state.selectedReport) {
+        const id = reportNodeId(state.selectedReport);
+        if (id) {
+          rememberViewedNode(viewingNodeId() || state.selectedNode);
+          state.selectedNode = id;
+        }
+      }
+      renderKnowledgeMap();
+    }
+
+    function renderAll() {
+      renderKnowledgeMap();
+      renderDashboard();
+      renderReader();
+      renderTables();
+      renderTopMarkdown();
+    }
+
+    function setZoom(nextScale) {
+      state.mapScale = Math.min(2.8, Math.max(0.45, nextScale));
+      renderKnowledgeMap();
+    }
+
+    function setMapBackground(value) {
+      const wrap = byId("graph-wrap");
+      wrap.classList.remove("paper", "white", "blueprint", "dark");
+      wrap.classList.add(value);
+    }
+
+    function installSettingsDialog() {
+      const panel = byId("map-settings");
+      byId("open-settings").addEventListener("click", () => {
+        panel.classList.toggle("hidden");
+      });
+      byId("close-settings").addEventListener("click", () => {
+        panel.classList.add("hidden");
+      });
+      byId("close-settings-x").addEventListener("click", () => {
+        panel.classList.add("hidden");
+      });
+      byId("map-background").addEventListener("input", (event) => {
+        setMapBackground(event.target.value);
+      });
+      byId("history-depth").addEventListener("input", (event) => {
+        state.historyDepth = Number(event.target.value);
+        renderKnowledgeMap();
+      });
+    }
+
+    function installMapInteractions() {
+      const svg = byId("knowledge-map");
+      const wrap = svg.closest(".graph-wrap");
+      const stopBrowserMapGesture = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      };
+      wrap.addEventListener("mousedown", (event) => {
+        if (event.button === 1) stopBrowserMapGesture(event);
+      });
+      wrap.addEventListener("auxclick", stopBrowserMapGesture);
+      wrap.addEventListener("contextmenu", (event) => {
+        if (state.dragging) stopBrowserMapGesture(event);
+      });
+      svg.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const factor = event.deltaY < 0 ? 1.12 : 0.89;
+        setZoom(state.mapScale * factor);
+      }, { passive: false });
+      svg.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.target.closest(".node")) return;
+        state.dragging = true;
+        state.dragStart = {
+          x: event.clientX,
+          y: event.clientY,
+          mapX: state.mapX,
+          mapY: state.mapY
+        };
+        wrap.classList.add("dragging");
+        svg.setPointerCapture(event.pointerId);
+      });
+      svg.addEventListener("pointermove", (event) => {
+        if (!state.dragging || !state.dragStart) return;
+        event.preventDefault();
+        event.stopPropagation();
+        state.mapX = state.dragStart.mapX + (event.clientX - state.dragStart.x);
+        state.mapY = state.dragStart.mapY + (event.clientY - state.dragStart.y);
+        const viewport = document.getElementById("map-viewport");
+        if (viewport) viewport.setAttribute("transform", mapTransform());
+      });
+      svg.addEventListener("pointerup", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        state.dragging = false;
+        state.dragStart = null;
+        wrap.classList.remove("dragging");
+        if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+      });
+      svg.addEventListener("pointerleave", () => {
+        state.dragging = false;
+        state.dragStart = null;
+        wrap.classList.remove("dragging");
+      });
+      byId("zoom-in").addEventListener("click", () => setZoom(state.mapScale * 1.18));
+      byId("zoom-out").addEventListener("click", () => setZoom(state.mapScale / 1.18));
+      byId("zoom-reset").addEventListener("click", () => {
+        state.mapScale = 1;
+        state.mapX = 0;
+        state.mapY = 0;
+        renderKnowledgeMap();
+      });
+    }
+
+    async function init() {
+      const response = await fetch("architecture.generated.json", { cache: "no-store" });
+      if (!response.ok) throw new Error("architecture.generated.json を読み込めません。start_architecture.bat を実行してください。");
+      state.data = await response.json();
+      byId("subtitle").textContent = `${state.data.generated.generatedAt} 生成 / ${graph().nodes.filter((node) => node.type === "report").length} レポート`;
+      byId("title").textContent = state.data.meta.title;
+      renderAll();
+      installMapInteractions();
+      installSettingsDialog();
+      ["query", "map-mode", "node-type"].forEach((id) => byId(id).addEventListener("input", renderAll));
+      document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => setView(tab.dataset.view)));
+      document.body.addEventListener("click", (event) => {
+        const link = event.target.closest("[data-report]");
+        if (!link) return;
+        event.preventDefault();
+        rememberViewedNode(viewingNodeId() || state.selectedNode);
+        state.selectedReport = link.dataset.report;
+        const reportNode = graph().nodes.find((node) => node.type === "report" && node.key === state.selectedReport);
+        state.selectedNode = reportNode?.id || state.selectedNode;
+        renderAll();
+        setView("reader");
+      });
+    }
+
+    init().catch((error) => {
+      byId("subtitle").textContent = error.message;
+      console.error(error);
+    });
+  </script>
+</body>
+</html>
