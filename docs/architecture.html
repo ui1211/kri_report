@@ -269,6 +269,121 @@
       margin-bottom: 10px;
     }
     .card p { color: var(--muted); margin-bottom: 10px; }
+    .note-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+    }
+    .note-pin {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border: 1px solid #d68a25;
+      border-radius: 8px;
+      background: #fff8df;
+      box-shadow: 0 5px 15px rgba(23, 32, 51, .18);
+      color: #8a4b00;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+      pointer-events: auto;
+      transform: translate(-50%, -50%);
+      touch-action: none;
+    }
+    .note-pin:hover,
+    .note-pin.active {
+      background: #ffe7a3;
+      border-color: #a85d00;
+    }
+    .note-editor {
+      position: absolute;
+      width: min(340px, calc(100vw - 24px));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 14px 36px rgba(23, 32, 51, .22);
+      padding: 12px;
+      z-index: 30;
+    }
+    .note-editor textarea {
+      width: 100%;
+      min-height: 88px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font: inherit;
+      padding: 8px;
+    }
+    .note-editor-head,
+    .note-editor-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .note-editor-actions {
+      justify-content: flex-end;
+      margin: 8px 0 0;
+    }
+    .note-thread {
+      max-height: 170px;
+      overflow: auto;
+      display: grid;
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      margin-top: 10px;
+      padding-top: 10px;
+    }
+    .note-message {
+      border-left: 3px solid #ffd166;
+      padding-left: 8px;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .note-message small,
+    .note-meta {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .note-list {
+      display: grid;
+      gap: 10px;
+    }
+    .note-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .note-toolbar label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .note-list-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+    .note-list-row input[type="checkbox"] {
+      min-height: auto;
+      margin-top: 13px;
+    }
+    .note-list-item {
+      text-align: left;
+      width: 100%;
+      background: #fff;
+      border-color: var(--line);
+      color: var(--ink);
+      font-weight: 400;
+    }
+    .note-list-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
     .split {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -329,6 +444,8 @@
   </style>
 </head>
 <body>
+  <div id="note-layer" class="note-layer" aria-live="polite"></div>
+  <div id="note-editor" class="note-editor hidden" role="dialog" aria-label="note editor"></div>
   <div class="app">
     <section class="panel map-pane">
       <div class="map-head">
@@ -413,6 +530,7 @@
           <button class="tab" data-view="reader" type="button">レポート閲覧</button>
           <button class="tab" data-view="tables" type="button">整理テーブル</button>
           <button class="tab" data-view="top" type="button">00_top本文</button>
+          <button class="tab" data-view="notes" type="button">Notes</button>
         </div>
       </header>
 
@@ -439,6 +557,24 @@
           <h2>00_top.md 本文</h2>
           <div id="top-markdown"></div>
         </section>
+
+        <section class="section hidden" data-pane="notes">
+          <h2>Notes</h2>
+          <p class="muted">Right-click anywhere to leave an area-bound note. Graph notes stay visible while the right pane changes.</p>
+          <div class="note-toolbar">
+            <label for="notes-sort">Sort</label>
+            <select id="notes-sort">
+              <option value="createdAsc">Created oldest</option>
+              <option value="createdDesc">Created newest</option>
+              <option value="updatedDesc">Updated newest</option>
+              <option value="authorAsc">Author</option>
+              <option value="areaAsc">Area</option>
+            </select>
+            <label><input id="notes-select-all" type="checkbox"> Select all</label>
+            <button id="notes-delete-selected" type="button">Delete selected</button>
+          </div>
+          <div id="notes-list" class="note-list"></div>
+        </section>
       </main>
     </section>
   </div>
@@ -455,7 +591,13 @@
       dragStart: null,
       nodeHistory: [],
       historyDepth: 1,
-      view: "dashboard"
+      view: "dashboard",
+      notes: [],
+      activeNoteId: null,
+      currentUser: "",
+      noteSort: "createdAsc",
+      selectedNoteIds: new Set(),
+      noteDrag: null
     };
 
     const byId = (id) => document.getElementById(id);
@@ -806,6 +948,353 @@
         </article>`).join("");
     }
 
+    const notesStorageKey = "kri-architecture-notes:v1";
+    const userStorageKey = "kri-architecture-notes-user";
+
+    function noteId() {
+      return window.crypto?.randomUUID ? window.crypto.randomUUID() : `note-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function ensureUser() {
+      if (state.currentUser) return state.currentUser;
+      const stored = localStorage.getItem(userStorageKey);
+      if (stored) {
+        state.currentUser = stored;
+        return stored;
+      }
+      const input = prompt("Your @user name", "@user") || "@user";
+      state.currentUser = input.startsWith("@") ? input : `@${input}`;
+      localStorage.setItem(userStorageKey, state.currentUser);
+      return state.currentUser;
+    }
+
+    function loadNotes() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(notesStorageKey) || "[]");
+        state.notes = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        state.notes = [];
+      }
+      state.currentUser = localStorage.getItem(userStorageKey) || "";
+    }
+
+    function saveNotes() {
+      localStorage.setItem(notesStorageKey, JSON.stringify(state.notes));
+    }
+
+    function currentContentKey() {
+      if (state.view === "reader") return `reader:${state.selectedReport || ""}`;
+      if (state.view === "dashboard") return `dashboard:${state.selectedNode || "all"}`;
+      return state.view;
+    }
+
+    function noteKeyFromEvent(event) {
+      if (event.target.closest(".map-pane")) return "map";
+      return currentContentKey();
+    }
+
+    function visibleNoteKeys() {
+      return new Set(["map", currentContentKey()]);
+    }
+
+    function noteAreaKey(note) {
+      return note.areaKey || note.pageKey || "";
+    }
+
+    function pageLabel(key) {
+      if (key === "map") return "Graph";
+      if (key.startsWith("reader:")) return `Report: ${key.slice(7) || "(none)"}`;
+      if (key.startsWith("dashboard:")) {
+        const id = key.slice(10);
+        return `Dashboard: ${nodeById()[id]?.label || id}`;
+      }
+      return key;
+    }
+
+    function formatDate(value) {
+      return new Date(value).toLocaleString("ja-JP", { dateStyle: "short", timeStyle: "short" });
+    }
+
+    function notesForCurrentPage() {
+      const keys = visibleNoteKeys();
+      return state.notes.filter((note) => keys.has(noteAreaKey(note)));
+    }
+
+    function sortNotes(notes) {
+      const sorted = [...notes];
+      const dateValue = (note, field) => new Date(note[field] || note.createdAt).getTime();
+      const authorValue = (note) => note.messages?.[0]?.author || note.author || "";
+      const lastText = (note) => note.messages?.at(-1)?.text || note.messages?.[0]?.text || "";
+      const comparers = {
+        createdAsc: (a, b) => dateValue(a, "createdAt") - dateValue(b, "createdAt"),
+        createdDesc: (a, b) => dateValue(b, "createdAt") - dateValue(a, "createdAt"),
+        updatedDesc: (a, b) => dateValue(b, "updatedAt") - dateValue(a, "updatedAt"),
+        authorAsc: (a, b) => authorValue(a).localeCompare(authorValue(b), "ja") || dateValue(a, "createdAt") - dateValue(b, "createdAt"),
+        areaAsc: (a, b) => pageLabel(noteAreaKey(a)).localeCompare(pageLabel(noteAreaKey(b)), "ja") || lastText(a).localeCompare(lastText(b), "ja")
+      };
+      return sorted.sort(comparers[state.noteSort] || comparers.createdAsc);
+    }
+
+    function renderNotes() {
+      const layer = byId("note-layer");
+      const notes = notesForCurrentPage();
+      layer.innerHTML = notes.map((note) => {
+        const first = note.messages?.[0];
+        const title = `${first?.author || note.author}: ${first?.text || ""}`;
+        const active = state.activeNoteId === note.id ? "active" : "";
+        return `<button class="note-pin ${active}" type="button" style="left:${note.x}px;top:${note.y}px" data-note-id="${esc(note.id)}" title="${esc(title)}">N</button>`;
+      }).join("");
+      layer.querySelectorAll(".note-pin").forEach((pin) => {
+        pin.addEventListener("pointerdown", startNoteDrag);
+        pin.addEventListener("mouseenter", () => {
+          if (!state.noteDrag) openNoteEditor(pin.dataset.noteId);
+        });
+        pin.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (pin.dataset.dragged === "true") {
+            pin.dataset.dragged = "false";
+            return;
+          }
+          openNoteEditor(pin.dataset.noteId, true);
+        });
+      });
+      renderNotesList();
+    }
+
+    function renderNotesList() {
+      const target = byId("notes-list");
+      if (!target) return;
+      const sorted = sortNotes(state.notes);
+      const allSelected = sorted.length > 0 && sorted.every((note) => state.selectedNoteIds.has(note.id));
+      const selectAll = byId("notes-select-all");
+      if (selectAll) selectAll.checked = allSelected;
+      target.innerHTML = sorted.map((note) => {
+        const messages = note.messages || [];
+        const first = messages[0] || {};
+        const last = messages[messages.length - 1] || first;
+        return `
+          <div class="note-list-row">
+            <input type="checkbox" data-note-check="${esc(note.id)}" ${state.selectedNoteIds.has(note.id) ? "checked" : ""} aria-label="select note">
+            <button class="note-list-item" type="button" data-note-id="${esc(note.id)}">
+              <strong>${esc(pageLabel(noteAreaKey(note)))}</strong>
+              <span>${esc(last.text || "")}</span>
+              <div class="note-meta">${esc(last.author || note.author)} / ${formatDate(note.updatedAt || note.createdAt)} / ${messages.length} message(s)</div>
+            </button>
+          </div>`;
+      }).join("") || `<div class="empty">No notes yet.</div>`;
+      target.querySelectorAll("[data-note-id]").forEach((item) => {
+        item.addEventListener("click", () => jumpToNote(item.dataset.noteId));
+      });
+      target.querySelectorAll("[data-note-check]").forEach((item) => {
+        item.addEventListener("change", () => {
+          if (item.checked) state.selectedNoteIds.add(item.dataset.noteCheck);
+          else state.selectedNoteIds.delete(item.dataset.noteCheck);
+          renderNotesList();
+        });
+      });
+    }
+
+    function openNoteEditor(id, focus = false) {
+      const note = state.notes.find((item) => item.id === id);
+      if (!note) return;
+      state.activeNoteId = id;
+      const editor = byId("note-editor");
+      const messages = note.messages || [];
+      const first = messages[0] || { text: "", author: note.author, createdAt: note.createdAt };
+      const left = Math.max(window.scrollX + 12, Math.min(note.x + 14, window.scrollX + window.innerWidth - 354));
+      const top = Math.max(window.scrollY + 12, Math.min(note.y + 14, window.scrollY + window.innerHeight - 260));
+      const replyUser = state.currentUser || localStorage.getItem(userStorageKey) || "@user";
+      editor.style.left = `${left}px`;
+      editor.style.top = `${top}px`;
+      editor.innerHTML = `
+        <div class="note-editor-head">
+          <strong>${esc(first.author || note.author)}</strong>
+          <button type="button" data-note-close>Close</button>
+        </div>
+        <textarea id="note-main-text">${esc(first.text || "")}</textarea>
+        <div class="note-editor-actions">
+          <button type="button" data-note-delete>Delete</button>
+          <button type="button" data-note-save>Save</button>
+        </div>
+        <div class="note-thread">
+          ${messages.map((message) => `
+            <div class="note-message">
+              <small>${esc(message.author)} / ${formatDate(message.createdAt)}</small>
+              <div>${esc(message.text).replace(/\n/g, "<br>")}</div>
+            </div>`).join("")}
+        </div>
+        <textarea id="note-reply-text" placeholder="Reply as ${esc(replyUser)}"></textarea>
+        <div class="note-editor-actions">
+          <button type="button" data-note-reply>Add reply</button>
+        </div>`;
+      editor.classList.remove("hidden");
+      editor.querySelector("[data-note-close]").addEventListener("click", closeNoteEditor);
+      editor.querySelector("[data-note-save]").addEventListener("click", () => saveMainNote(id));
+      editor.querySelector("[data-note-reply]").addEventListener("click", () => addNoteReply(id));
+      editor.querySelector("[data-note-delete]").addEventListener("click", () => deleteNote(id));
+      if (focus) editor.querySelector("#note-main-text").focus();
+      renderNotes();
+    }
+
+    function closeNoteEditor() {
+      state.activeNoteId = null;
+      byId("note-editor").classList.add("hidden");
+      renderNotes();
+    }
+
+    function saveMainNote(id) {
+      const note = state.notes.find((item) => item.id === id);
+      if (!note) return;
+      const text = byId("note-main-text").value.trim();
+      if (!text) return;
+      note.messages ||= [];
+      if (note.messages[0]) {
+        note.messages[0].text = text;
+        note.messages[0].updatedAt = new Date().toISOString();
+      } else {
+        note.messages.push({ id: noteId(), author: ensureUser(), text, createdAt: new Date().toISOString() });
+      }
+      note.updatedAt = new Date().toISOString();
+      saveNotes();
+      openNoteEditor(id);
+    }
+
+    function addNoteReply(id) {
+      const note = state.notes.find((item) => item.id === id);
+      if (!note) return;
+      const text = byId("note-reply-text").value.trim();
+      if (!text) return;
+      const now = new Date().toISOString();
+      note.messages ||= [];
+      note.messages.push({ id: noteId(), author: ensureUser(), text, createdAt: now });
+      note.updatedAt = now;
+      saveNotes();
+      openNoteEditor(id);
+    }
+
+    function deleteNote(id) {
+      if (!confirm("Delete this note?")) return;
+      state.notes = state.notes.filter((note) => note.id !== id);
+      state.selectedNoteIds.delete(id);
+      saveNotes();
+      closeNoteEditor();
+    }
+
+    function deleteSelectedNotes() {
+      if (state.selectedNoteIds.size === 0) return;
+      if (!confirm(`Delete ${state.selectedNoteIds.size} selected note(s)?`)) return;
+      state.notes = state.notes.filter((note) => !state.selectedNoteIds.has(note.id));
+      state.selectedNoteIds.clear();
+      saveNotes();
+      closeNoteEditor();
+      renderNotes();
+    }
+
+    function createNoteAt(event) {
+      if (state.view === "notes") return;
+      if (event.target.closest("input, textarea, select, button, a, .note-editor, .note-pin")) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const author = ensureUser();
+      const text = prompt("Note text", "")?.trim();
+      if (!text) return;
+      const now = new Date().toISOString();
+      const note = {
+        id: noteId(),
+        areaKey: noteKeyFromEvent(event),
+        x: event.pageX,
+        y: event.pageY,
+        author,
+        createdAt: now,
+        updatedAt: now,
+        messages: [{ id: noteId(), author, text, createdAt: now }]
+      };
+      state.notes.push(note);
+      saveNotes();
+      renderNotes();
+      openNoteEditor(note.id, true);
+    }
+
+    function jumpToNote(id) {
+      const note = state.notes.find((item) => item.id === id);
+      if (!note) return;
+      const key = noteAreaKey(note);
+      if (key === "map") {
+        renderAll();
+      } else if (key.startsWith("reader:")) {
+        state.selectedReport = key.slice(7);
+        const reportNode = reportNodeId(state.selectedReport);
+        if (reportNode) state.selectedNode = reportNode;
+        renderAll();
+        setView("reader");
+      } else if (key.startsWith("dashboard:")) {
+        const id = key.slice(10);
+        state.selectedNode = id === "all" ? null : id;
+        renderAll();
+        setView("dashboard");
+      } else {
+        renderAll();
+        setView(key);
+      }
+      requestAnimationFrame(() => {
+        window.scrollTo({ left: Math.max(0, note.x - window.innerWidth / 2), top: Math.max(0, note.y - window.innerHeight / 2), behavior: "smooth" });
+        openNoteEditor(note.id, true);
+      });
+    }
+
+    function startNoteDrag(event) {
+      const pin = event.currentTarget;
+      const note = state.notes.find((item) => item.id === pin.dataset.noteId);
+      if (!note) return;
+      event.preventDefault();
+      event.stopPropagation();
+      closeNoteEditor();
+      pin.dataset.dragged = "false";
+      state.noteDrag = {
+        id: note.id,
+        startX: event.pageX,
+        startY: event.pageY,
+        noteX: note.x,
+        noteY: note.y,
+        moved: false,
+        pointerId: event.pointerId
+      };
+      pin.setPointerCapture(event.pointerId);
+    }
+
+    function moveNoteDrag(event) {
+      if (!state.noteDrag) return;
+      const note = state.notes.find((item) => item.id === state.noteDrag.id);
+      if (!note) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const dx = event.pageX - state.noteDrag.startX;
+      const dy = event.pageY - state.noteDrag.startY;
+      if (Math.abs(dx) + Math.abs(dy) > 3) state.noteDrag.moved = true;
+      note.x = Math.max(0, state.noteDrag.noteX + dx);
+      note.y = Math.max(0, state.noteDrag.noteY + dy);
+      const pin = document.querySelector(`.note-pin[data-note-id="${CSS.escape(note.id)}"]`);
+      if (pin) {
+        pin.style.left = `${note.x}px`;
+        pin.style.top = `${note.y}px`;
+        pin.dataset.dragged = state.noteDrag.moved ? "true" : "false";
+      }
+    }
+
+    function finishNoteDrag(event) {
+      if (!state.noteDrag) return;
+      const note = state.notes.find((item) => item.id === state.noteDrag.id);
+      if (note && state.noteDrag.moved) {
+        note.updatedAt = new Date().toISOString();
+        saveNotes();
+        renderNotesList();
+      }
+      const pin = document.querySelector(`.note-pin[data-note-id="${CSS.escape(state.noteDrag.id)}"]`);
+      if (pin && pin.hasPointerCapture?.(state.noteDrag.pointerId)) pin.releasePointerCapture(state.noteDrag.pointerId);
+      state.noteDrag = null;
+    }
+
     function setView(view) {
       state.view = view;
       document.querySelectorAll("[data-pane]").forEach((pane) => pane.classList.toggle("hidden", pane.dataset.pane !== view));
@@ -818,6 +1307,7 @@
         }
       }
       renderKnowledgeMap();
+      renderNotes();
     }
 
     function renderAll() {
@@ -826,6 +1316,7 @@
       renderReader();
       renderTables();
       renderTopMarkdown();
+      renderNotes();
     }
 
     function setZoom(nextScale) {
@@ -925,15 +1416,39 @@
       });
     }
 
+    function installNoteInteractions() {
+      document.addEventListener("contextmenu", createNoteAt);
+      document.addEventListener("pointermove", moveNoteDrag);
+      document.addEventListener("pointerup", finishNoteDrag);
+      document.addEventListener("pointercancel", finishNoteDrag);
+      document.addEventListener("click", (event) => {
+        if (event.target.closest(".note-editor, .note-pin, [data-note-id], [data-note-check], .note-toolbar")) return;
+        if (!byId("note-editor").classList.contains("hidden")) closeNoteEditor();
+      });
+      byId("notes-sort").addEventListener("input", (event) => {
+        state.noteSort = event.target.value;
+        renderNotesList();
+      });
+      byId("notes-select-all").addEventListener("change", (event) => {
+        if (event.target.checked) state.notes.forEach((note) => state.selectedNoteIds.add(note.id));
+        else state.selectedNoteIds.clear();
+        renderNotesList();
+      });
+      byId("notes-delete-selected").addEventListener("click", deleteSelectedNotes);
+      window.addEventListener("resize", renderNotes);
+    }
+
     async function init() {
       const response = await fetch("architecture.generated.json", { cache: "no-store" });
       if (!response.ok) throw new Error("architecture.generated.json を読み込めません。start_architecture.bat を実行してください。");
       state.data = await response.json();
+      loadNotes();
       byId("subtitle").textContent = `${state.data.generated.generatedAt} 生成 / ${graph().nodes.filter((node) => node.type === "report").length} レポート`;
       byId("title").textContent = state.data.meta.title;
       renderAll();
       installMapInteractions();
       installSettingsDialog();
+      installNoteInteractions();
       ["query", "map-mode", "node-type"].forEach((id) => byId(id).addEventListener("input", renderAll));
       document.querySelectorAll(".tab").forEach((tab) => tab.addEventListener("click", () => setView(tab.dataset.view)));
       document.body.addEventListener("click", (event) => {
