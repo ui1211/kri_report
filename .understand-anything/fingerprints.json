@@ -1,0 +1,1049 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "5afe95d1f73d0a69bbb6dc0ae910f75cf80bf9b5",
+  "generatedAt": "2026-05-26T00:07:21.569Z",
+  "files": {
+    ".python-version": {
+      "filePath": ".python-version",
+      "contentHash": "a876e0b10411037a012498b9fe18d9bc1df32ed8b722a13564dc944ddcfd9135",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 2,
+      "hasStructuralAnalysis": false
+    },
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "cba2a2f36b2ba9dada019bb828116f4e6bd22f78519bd5c97a95861ef5129f45",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": false
+    },
+    "AGENTS.md": {
+      "filePath": "AGENTS.md",
+      "contentHash": "e7540734b7661d91a832b02338adcb016bc5f150a81f5f587f062229a63f8056",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 53,
+      "hasStructuralAnalysis": true
+    },
+    "DESIGN.md": {
+      "filePath": "DESIGN.md",
+      "contentHash": "bcc5aa90ec0916586466be6c8f99bb197001627738b614ed1ccced6074851669",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 27,
+      "hasStructuralAnalysis": true
+    },
+    "docker/redmine/docker-compose.yml": {
+      "filePath": "docker/redmine/docker-compose.yml",
+      "contentHash": "8b21030298b5d5a30987335f811a050b5b5d5690ef8148b7a5761558afe72bea",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 38,
+      "hasStructuralAnalysis": true
+    },
+    "docker/redmine/docker/redmine/Dockerfile": {
+      "filePath": "docker/redmine/docker/redmine/Dockerfile",
+      "contentHash": "d2e0348a5e47571d30608f9bed9dc4940f3d4762b2a579828b8b0f65d61d6cf4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    "docker/redmine/README.md": {
+      "filePath": "docker/redmine/README.md",
+      "contentHash": "ea260264f80d2e98e783de4c89ae550fe94eeb0c357f62bb5b7963feb95f7284",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "docker/searxng/README.md": {
+      "filePath": "docker/searxng/README.md",
+      "contentHash": "1a4d8beea3961541e34440da6b8664c3d36e12e56c629526d26c5946429129ab",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 158,
+      "hasStructuralAnalysis": true
+    },
+    "docker/searxng/settings.yml": {
+      "filePath": "docker/searxng/settings.yml",
+      "contentHash": "c7d1ad9f1c9e5bba4f68bcccfd4067722cb10693aba0506ae14be3d9093aadf4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 43,
+      "hasStructuralAnalysis": true
+    },
+    "docs/architecture.html": {
+      "filePath": "docs/architecture.html",
+      "contentHash": "b42cdeb3b60e8dda817e5891e0520070807044b17f59d168d4a99b3d9df962b1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1474,
+      "hasStructuralAnalysis": false
+    },
+    "docs/architecture.json": {
+      "filePath": "docs/architecture.json",
+      "contentHash": "33b461a53ea1353278eb14101b420c915102df8446b58ed7a909d599d8a1666e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 207,
+      "hasStructuralAnalysis": true
+    },
+    "main.py": {
+      "filePath": "main.py",
+      "contentHash": "3e8ea06ac02a51fa0a0156400d4ce0e3431aeb11d757fcaefdbea74c6fb807d0",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "exported": true,
+          "lineCount": 2
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [
+        "main"
+      ],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    "manual/2026-04-17_vscode_setup.md": {
+      "filePath": "manual/2026-04-17_vscode_setup.md",
+      "contentHash": "c216f0cd8f0125604332dfe3fd92dd8c44e7c5a0d84f85e631b83bd8aa54f056",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 122,
+      "hasStructuralAnalysis": true
+    },
+    "manual/2026-04-20_python_tutorial.md": {
+      "filePath": "manual/2026-04-20_python_tutorial.md",
+      "contentHash": "2be58b4aae072802e785211854200638ebc106d37a6ac097008944731ca0920b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 174,
+      "hasStructuralAnalysis": true
+    },
+    "manual/2026-04-23_auto_report.md": {
+      "filePath": "manual/2026-04-23_auto_report.md",
+      "contentHash": "c366650404ce6b38da4d05080053b856c1bde8c629d18690a1ad2f824431ae7f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 120,
+      "hasStructuralAnalysis": true
+    },
+    "manual/cline_mcp_settings.json": {
+      "filePath": "manual/cline_mcp_settings.json",
+      "contentHash": "bb36fef9e009accb63a073c58dd6013cd5ca11f73de06631438f1f48471d7b72",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    "manual/config.yaml": {
+      "filePath": "manual/config.yaml",
+      "contentHash": "d1c18c0ba9b9de771b6139bd1a0b730037b4dcf9ae53f903967f1078747ac4f5",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 67,
+      "hasStructuralAnalysis": true
+    },
+    "manual/settings.json": {
+      "filePath": "manual/settings.json",
+      "contentHash": "4a19afd861b680ad43e433b812c2d9bb59c3612b00c49821fc901f71ca03fbe4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 250,
+      "hasStructuralAnalysis": true
+    },
+    "plan/CHANGELOG.md": {
+      "filePath": "plan/CHANGELOG.md",
+      "contentHash": "a66c89a71d83fac77e2a0bf5666575d5d1e84eb443bea318492d242c846e2652",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 195,
+      "hasStructuralAnalysis": true
+    },
+    "plan/skill_standardization_plan.md": {
+      "filePath": "plan/skill_standardization_plan.md",
+      "contentHash": "30f50a7a715accab8570c20d79cd7a4a60af89cc50c94a996ae141d2b874ddd9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 169,
+      "hasStructuralAnalysis": true
+    },
+    "pyproject.toml": {
+      "filePath": "pyproject.toml",
+      "contentHash": "5a778be43f1396cf3fde66f9ce9685212aa336ce537dc3d7fd439e71e8e32e65",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 11,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": true
+    },
+    "report/00_top.md": {
+      "filePath": "report/00_top.md",
+      "contentHash": "027b7b9e2e40147768395b6f93772966d88acc9a6fa6235432d7802b7b1594c1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 421,
+      "hasStructuralAnalysis": true
+    },
+    "report/2026-04-03_16GB_VRAM_LLM.md": {
+      "filePath": "report/2026-04-03_16GB_VRAM_LLM.md",
+      "contentHash": "e15dc61a674f6bd9483ea3fb02aebcfe2d14253473a9578e8a09e3e9b5a89c32",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 367,
+      "hasStructuralAnalysis": true
+    },
+    "report/2026-04-04_ComfyUI.md": {
+      "filePath": "report/2026-04-04_ComfyUI.md",
+      "contentHash": "f48bfceb1c4011f201409a7729c873069e81ba69379970691f058f300fdb322e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 197,
+      "hasStructuralAnalysis": true
+    },
+    "report/2026-04-22_pointcloud_oss.md": {
+      "filePath": "report/2026-04-22_pointcloud_oss.md",
+      "contentHash": "d920420ea145371783085e8248aae8a9a016629ce14fbc06d73a1688c52ee1e7",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 255,
+      "hasStructuralAnalysis": true
+    },
+    "report/A4/2026-04-03_16GB_VRAM_LLM_A4.md": {
+      "filePath": "report/A4/2026-04-03_16GB_VRAM_LLM_A4.md",
+      "contentHash": "9d18b3af53e8e6628207dde0b29eed6e1100aadb3b522289cff1f71ef7df3e80",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "report/A4/2026-04-04_ComfyUI_A4.md": {
+      "filePath": "report/A4/2026-04-04_ComfyUI_A4.md",
+      "contentHash": "5181ba1b20d77399752123f3bf4361226490da401d0c6ae954ae1fec035fdf0f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "report/A4/2026-04-15_16GB_VRAM_LLM_A4.md": {
+      "filePath": "report/A4/2026-04-15_16GB_VRAM_LLM_A4.md",
+      "contentHash": "f2f86f54d38887edf05886050b0e8487bc64722260c6a365bab3b755cf6e772c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "report/A4/2026-04-22_pointcloud_oss.md": {
+      "filePath": "report/A4/2026-04-22_pointcloud_oss.md",
+      "contentHash": "3adb301f5c9e3fc3a9cb521e8f68c62ce2612eab99eea572a1a032dfcac271a9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "skills/deep-research/SKILL.md": {
+      "filePath": "skills/deep-research/SKILL.md",
+      "contentHash": "a44e34a1001c4b0733214d0bd9c89bbb8eea4bb0f2eb45fee6ef757f7efa4f5a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 156,
+      "hasStructuralAnalysis": true
+    },
+    "skills/drawio/SKILL.md": {
+      "filePath": "skills/drawio/SKILL.md",
+      "contentHash": "59b03f644ef57e9aae76293cd605b3f7a938258732871a0a1308de09ff4383c8",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 186,
+      "hasStructuralAnalysis": true
+    },
+    "skills/local-ralph-loop/SKILL.md": {
+      "filePath": "skills/local-ralph-loop/SKILL.md",
+      "contentHash": "cf3435ed4f755b28078411face93bc8403d35c4770a4007b2c79f9958c0754f1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 303,
+      "hasStructuralAnalysis": true
+    },
+    "skills/python-patterns/SKILL.md": {
+      "filePath": "skills/python-patterns/SKILL.md",
+      "contentHash": "b91f582e9e1d57c7b699072fc09b9713eae9a555bb3d75eddd104977c6fcf275",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 751,
+      "hasStructuralAnalysis": true
+    },
+    "skills/python-testing/SKILL.md": {
+      "filePath": "skills/python-testing/SKILL.md",
+      "contentHash": "6e16f071578e9b4c65e17e5b5f27c8c05c45021a03aad91a1b2c9694d1f7ad48",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 817,
+      "hasStructuralAnalysis": true
+    },
+    "skills/pytorch-patterns/SKILL.md": {
+      "filePath": "skills/pytorch-patterns/SKILL.md",
+      "contentHash": "60859d463760ef37ca012efc2ccbf17b072079837682362e11d9f4da0039111f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 397,
+      "hasStructuralAnalysis": true
+    },
+    "skills/README.md": {
+      "filePath": "skills/README.md",
+      "contentHash": "80ef6e6341d25514fe67fd33c6bf0f8a3d31f99960f4d15eb331f9a41a9ed45e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 205,
+      "hasStructuralAnalysis": true
+    },
+    "skills/report-fact-check/SKILL.md": {
+      "filePath": "skills/report-fact-check/SKILL.md",
+      "contentHash": "cb05a1abb87f5f042062697609b28526cfb823acc0558d81998a2b58355e211d",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 145,
+      "hasStructuralAnalysis": true
+    },
+    "skills/report-format-a4/SKILL.md": {
+      "filePath": "skills/report-format-a4/SKILL.md",
+      "contentHash": "350f2afb207eb8b59e2f30a3910b712a349283b1b2716ed75f692844ab22eec6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 116,
+      "hasStructuralAnalysis": true
+    },
+    "skills/report-format-kri/SKILL.md": {
+      "filePath": "skills/report-format-kri/SKILL.md",
+      "contentHash": "7df73cf6924c9a0a0c560191b85ba330cd1e0ed68a64e18f03c849f8379cb15a",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 212,
+      "hasStructuralAnalysis": true
+    },
+    "skills/research-report/SKILL.md": {
+      "filePath": "skills/research-report/SKILL.md",
+      "contentHash": "230678864de867a8855a9467a196664e047b3b4fc7f9acdaf03fbe8eb214f082",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 92,
+      "hasStructuralAnalysis": true
+    },
+    "skills/workflow-html-visualizer/SKILL.md": {
+      "filePath": "skills/workflow-html-visualizer/SKILL.md",
+      "contentHash": "c027e65d045ee5a2f04f44f54b0d9a6e38f9d58682c17931620cb0cc7b537a5f",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 306,
+      "hasStructuralAnalysis": true
+    },
+    "src/__init__.py": {
+      "filePath": "src/__init__.py",
+      "contentHash": "7ae449085b2b8e45a05c93ff962f22fcb7f0e85dfadefaf5895c40e524768e14",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": ".thingspeak_client",
+          "specifiers": [
+            "SensorHealth",
+            "ThingSpeakClient",
+            "ThingSpeakError",
+            "ThingSpeakReadOptions",
+            "filter_rows_after_created_at",
+            "filter_rows_after_entry_id",
+            "normalize_feed_row"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 20,
+      "hasStructuralAnalysis": true
+    },
+    "src/thingspeak_client.py": {
+      "filePath": "src/thingspeak_client.py",
+      "contentHash": "57d922a07f88c053516902ecb17a6db33ec697fb63e83b5f267f86245d942ae5",
+      "functions": [
+        {
+          "name": "normalize_feed_row",
+          "params": [
+            "row"
+          ],
+          "returnType": "dict[str, Any]",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "filter_rows_after_entry_id",
+          "params": [
+            "rows",
+            "last_entry_id"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "filter_rows_after_created_at",
+          "params": [
+            "rows",
+            "last_created_at"
+          ],
+          "returnType": "list[dict[str, Any]]",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "_feeds",
+          "params": [
+            "payload"
+          ],
+          "returnType": "list[Mapping[str, Any]]",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_entry_id",
+          "params": [
+            "row"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_positive_int",
+          "params": [
+            "value"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_field_id",
+          "params": [
+            "value"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_non_negative_int",
+          "params": [
+            "value",
+            "name"
+          ],
+          "returnType": "int",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_aggregation_value",
+          "params": [
+            "value"
+          ],
+          "returnType": "int | str",
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "_format_datetime",
+          "params": [
+            "value"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_parse_datetime",
+          "params": [
+            "value"
+          ],
+          "returnType": "datetime | None",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "_validate_window",
+          "params": [
+            "start",
+            "end",
+            "chunk"
+          ],
+          "returnType": "None",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "_iter_windows",
+          "params": [
+            "start",
+            "end",
+            "chunk"
+          ],
+          "returnType": "Iterator[tuple[datetime, datetime]]",
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "_to_number_or_none",
+          "params": [
+            "value"
+          ],
+          "returnType": "float | int | None",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "_redact_api_key",
+          "params": [
+            "url"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "_read_error_message",
+          "params": [
+            "exc"
+          ],
+          "returnType": "str",
+          "exported": true,
+          "lineCount": 15
+        },
+        {
+          "name": "_retry_after",
+          "params": [
+            "exc"
+          ],
+          "returnType": "float | None",
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "classes": [
+        {
+          "name": "ThingSpeakError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "ThingSpeakAccessError",
+          "methods": [],
+          "properties": [],
+          "exported": true,
+          "lineCount": 2
+        },
+        {
+          "name": "ThingSpeakResponseError",
+          "methods": [
+            "__init__"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "ThingSpeakReadOptions",
+          "methods": [],
+          "properties": [
+            "results",
+            "days",
+            "minutes",
+            "start",
+            "end",
+            "timezone",
+            "include_status",
+            "include_metadata",
+            "include_location",
+            "min_value",
+            "max_value",
+            "round_digits",
+            "timescale",
+            "sum_minutes",
+            "average_minutes",
+            "median_minutes"
+          ],
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "SensorHealth",
+          "methods": [],
+          "properties": [
+            "channel_id",
+            "alive",
+            "last_data_age_seconds",
+            "max_age_seconds",
+            "checked_at",
+            "last_entry"
+          ],
+          "exported": true,
+          "lineCount": 9
+        },
+        {
+          "name": "ThingSpeakClient",
+          "methods": [
+            "__post_init__",
+            "read_settings",
+            "read_channel",
+            "read_field",
+            "read_last_entry",
+            "read_last_entry_age",
+            "check_sensor_alive",
+            "backfill_channel",
+            "iter_backfill_channel",
+            "poll_new_entries",
+            "_read_params",
+            "_with_read_key",
+            "_get_json",
+            "_request"
+          ],
+          "properties": [
+            "read_api_key",
+            "user_api_key",
+            "base_url",
+            "timeout_seconds",
+            "max_retries",
+            "retry_backoff_seconds",
+            "user_agent"
+          ],
+          "exported": true,
+          "lineCount": 312
+        }
+      ],
+      "imports": [
+        {
+          "source": "json",
+          "specifiers": [
+            "json"
+          ]
+        },
+        {
+          "source": "time",
+          "specifiers": [
+            "time"
+          ]
+        },
+        {
+          "source": "collections.abc",
+          "specifiers": [
+            "Iterable",
+            "Iterator",
+            "Mapping"
+          ]
+        },
+        {
+          "source": "dataclasses",
+          "specifiers": [
+            "dataclass",
+            "field"
+          ]
+        },
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime",
+            "timedelta"
+          ]
+        },
+        {
+          "source": "typing",
+          "specifiers": [
+            "Any"
+          ]
+        },
+        {
+          "source": "urllib.error",
+          "specifiers": [
+            "HTTPError",
+            "URLError"
+          ]
+        },
+        {
+          "source": "urllib.parse",
+          "specifiers": [
+            "urlencode",
+            "urljoin"
+          ]
+        },
+        {
+          "source": "urllib.request",
+          "specifiers": [
+            "Request",
+            "urlopen"
+          ]
+        },
+        {
+          "source": "loguru",
+          "specifiers": [
+            "logger"
+          ]
+        },
+        {
+          "source": "tqdm.auto",
+          "specifiers": [
+            "tqdm"
+          ]
+        }
+      ],
+      "exports": [
+        "ThingSpeakError",
+        "ThingSpeakAccessError",
+        "ThingSpeakResponseError",
+        "ThingSpeakReadOptions",
+        "SensorHealth",
+        "ThingSpeakClient",
+        "normalize_feed_row",
+        "filter_rows_after_entry_id",
+        "filter_rows_after_created_at",
+        "_feeds",
+        "_entry_id",
+        "_positive_int",
+        "_field_id",
+        "_non_negative_int",
+        "_aggregation_value",
+        "_format_datetime",
+        "_parse_datetime",
+        "_validate_window",
+        "_iter_windows",
+        "_to_number_or_none",
+        "_redact_api_key",
+        "_read_error_message",
+        "_retry_after"
+      ],
+      "totalLines": 564,
+      "hasStructuralAnalysis": true
+    },
+    "start_architecture.bat": {
+      "filePath": "start_architecture.bat",
+      "contentHash": "6f892eef7ae3dd5f5e6472ae5498ee057549b75f05a714fb57c73de9b54362f9",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": false
+    },
+    "tests/test_thingspeak_client.py": {
+      "filePath": "tests/test_thingspeak_client.py",
+      "contentHash": "3cce4f8aeb72d65b2a214f3699f6c33eaaeb7b49561a177ee90b26ae3d44f36e",
+      "functions": [
+        {
+          "name": "test_client_requires_https_base_url",
+          "params": [],
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "test_read_channel_builds_query_options_with_read_key",
+          "params": [],
+          "exported": true,
+          "lineCount": 41
+        },
+        {
+          "name": "test_read_field_rejects_out_of_range_field_id",
+          "params": [
+            "field_id"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_read_options_reject_invalid_results",
+          "params": [
+            "results"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_normalize_feed_row_converts_numeric_fields",
+          "params": [],
+          "exported": true,
+          "lineCount": 18
+        },
+        {
+          "name": "test_filter_rows_after_entry_id_returns_newer_rows_only",
+          "params": [],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_filter_rows_after_created_at_ignores_invalid_dates",
+          "params": [],
+          "exported": true,
+          "lineCount": 11
+        },
+        {
+          "name": "test_backfill_channel_chunks_and_deduplicates_rows",
+          "params": [],
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "test_poll_new_entries_yields_only_entries_after_watermark",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "test_poll_new_entries_rejects_cache_unsafe_result_counts",
+          "params": [
+            "results"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "test_check_sensor_alive_uses_last_data_age",
+          "params": [],
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "test_get_json_maps_access_denied_response",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_get_json_rejects_non_object_json",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "test_get_json_maps_error_payload",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "test_request_retries_retryable_http_error_then_succeeds",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "test_request_raises_after_url_error_retries",
+          "params": [
+            "monkeypatch"
+          ],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "classes": [
+        {
+          "name": "RecordingClient",
+          "methods": [
+            "__init__",
+            "_get_json"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 14
+        }
+      ],
+      "imports": [
+        {
+          "source": "datetime",
+          "specifiers": [
+            "UTC",
+            "datetime",
+            "timedelta"
+          ]
+        },
+        {
+          "source": "urllib.error",
+          "specifiers": [
+            "HTTPError",
+            "URLError"
+          ]
+        },
+        {
+          "source": "unittest.mock",
+          "specifiers": [
+            "Mock"
+          ]
+        },
+        {
+          "source": "pytest",
+          "specifiers": [
+            "pytest"
+          ]
+        },
+        {
+          "source": "src.thingspeak_client",
+          "specifiers": [
+            "LIVE_CACHE_SAFE_RESULTS",
+            "MAX_RESULTS",
+            "SensorHealth",
+            "ThingSpeakAccessError",
+            "ThingSpeakClient",
+            "ThingSpeakError",
+            "ThingSpeakReadOptions",
+            "ThingSpeakResponseError",
+            "filter_rows_after_created_at",
+            "filter_rows_after_entry_id",
+            "normalize_feed_row"
+          ]
+        }
+      ],
+      "exports": [
+        "RecordingClient",
+        "test_client_requires_https_base_url",
+        "test_read_channel_builds_query_options_with_read_key",
+        "test_read_field_rejects_out_of_range_field_id",
+        "test_read_options_reject_invalid_results",
+        "test_normalize_feed_row_converts_numeric_fields",
+        "test_filter_rows_after_entry_id_returns_newer_rows_only",
+        "test_filter_rows_after_created_at_ignores_invalid_dates",
+        "test_backfill_channel_chunks_and_deduplicates_rows",
+        "test_poll_new_entries_yields_only_entries_after_watermark",
+        "test_poll_new_entries_rejects_cache_unsafe_result_counts",
+        "test_check_sensor_alive_uses_last_data_age",
+        "test_get_json_maps_access_denied_response",
+        "test_get_json_rejects_non_object_json",
+        "test_get_json_maps_error_payload",
+        "test_request_retries_retryable_http_error_then_succeeds",
+        "test_request_raises_after_url_error_retries"
+      ],
+      "totalLines": 290,
+      "hasStructuralAnalysis": true
+    },
+    "workflows/README.md": {
+      "filePath": "workflows/README.md",
+      "contentHash": "53a89e364c14d18391d760599a53a483c0510b119c4059e76c74f1fb1ce30bd6",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 200,
+      "hasStructuralAnalysis": true
+    },
+    "workflows/research-report-kri.md": {
+      "filePath": "workflows/research-report-kri.md",
+      "contentHash": "068e10bb02db4ac704fc494aabc6292195f34e8785b816f0fb0064a424fd780b",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 195,
+      "hasStructuralAnalysis": true
+    }
+  }
+}
