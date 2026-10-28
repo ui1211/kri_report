@@ -19,6 +19,8 @@
 - Looker の公開料金ページでは、Looker (Google Cloud core) はプラットフォーム料金とユーザー料金で構成され、Standard / Enterprise / Embed はいずれも年間契約の `Call sales` とされる。Standard は 50 ユーザー未満の小規模組織向けで、10 Standard Users、2 Developer Users、月 1,000 query-based API calls と月 1,000 administrative API calls が含まれる。
 - Looker の Enterprise は内部 BI 向けで、10 Standard Users、2 Developer Users、月 100,000 query-based API calls と月 10,000 administrative API calls が含まれる。Embed は外部分析や組み込み用途向けで、月 500,000 query-based API calls と月 100,000 administrative API calls が含まれる。
 
+- 2026-10-28確認: Looker対話分析の旧開始日とユーザー別割当は現行ページに合わせて更新した。BigQuery単価は過去調査時点の参考値で、今回の網羅的再照合は未実施。リージョン・通貨・契約条件を指定して[公式料金表](https://cloud.google.com/bigquery/pricing?hl=en_US)で再見積もりする。
+
 ## 4. 課題
 - C1: IoT データの取り込み方式によって、BigQuery 取り込み料金、Pub/Sub 料金、Dataflow 料金、遅延、重複制御、実装難度が大きく変わる。
 - C2: Looker のダッシュボードや Explore が生データを広くスキャンし、PDT・集計テーブル・長期保存パーティションも無計画に増えると、BigQuery のクエリ費用、保存費用、応答時間が増えやすい。
@@ -35,7 +37,7 @@
   - 実運用: Looker Explores では時刻フィルタを必須化し、必要列のみ参照し、日次・時次集計、PDT、BigQuery マテリアライズドビュー、BI Engine、パーティション・クラスタリングを組み合わせる。センサー raw は時刻パーティション、保持期間は partition expiration で制御し、Looker 用には必要粒度に集計したテーブルを長期保持する。
 - C3対応
   - OSS: 該当なし。Looker ライセンスは商用サービスの契約条件に依存する。
-  - 研究: Looker 料金ページでは、Developer / Standard / Viewer の 3 種類のユーザーライセンスが定義され、権限範囲が異なる。Conversational Analytics は 2026-09-30 までフェアユース範囲で無制限、2026-10-01 以降は月次割当超過分が Input $3.00/1M tokens、Output $20.00/1M tokens とされている。
+  - 研究: Looker 料金ページでは、Developer / Standard / Viewer の 3 種類のユーザーライセンスが定義され、権限範囲が異なる。[料金ページ](https://cloud.google.com/looker/pricing)の2026-10-28確認時点では、フェアユース内で割当・超過料金なしのプロモーションを延長し、課金・割当開始前に少なくとも90日前に正式通知するとしている。
   - 実運用: 見積もり時は Standard / Enterprise / Embed の edition、Developer / Standard / Viewer の人数、API 呼び出し上限、Embed の外部ユーザー規模、Conversational Analytics の利用有無を分けて整理する。
 
 ## 6. 価値
@@ -141,11 +143,11 @@
   - Standard は Explore、SQL Runner、Scheduling、Dashboard / Look 作成が可能だが、開発モードや管理権限は含まれない。
   - Viewer はフォルダ、ボード、ダッシュボード、Looks の閲覧中心で、Explore や SQL Runner は含まれない。
 - 主なスペック or 数値:
-  - Conversational Analytics 月次割当: Viewer input 1M / output 20K、Standard input 2M / output 40K、Developer input 4M / output 80K data tokens
-  - 2026-09-30 までフェアユース範囲で無制限
-  - 2026-10-01 以降の超過単価: Input $3.00/1M tokens、Output $20.00/1M tokens
+  - 2026-10-28確認時点の将来の月次割当はインスタンス単位の共有枠: Standard 入力60M・出力1.2M、Enterprise / Advanced 入力300M・出力6M、Embed / Elite 入力1.2B・出力24M data tokens。
+  - フェアユース内の割当・超過料金なしのプロモーションを延長中。適用開始日は未記載で、少なくとも90日前に正式通知する。
+  - 適用開始後の予定超過単価: 入力 $3.00/1M tokens、出力 $20.00/1M tokens。
 - 制約 or 注意点:
-  - 生成 AI 機能を使う場合、2026-10-01 以降の超過課金を見積もりに入れる必要がある。
+  - 生成AI機能の見積もりでは、課金開始の正式通知、契約条件、実利用量と将来の超過単価を確認する。
 
 ### Looker キャッシュ・PDT・Aggregate Awareness
 - 概要: Looker は [クエリキャッシュ](https://cloud.google.com/looker/docs/caching-and-datagroups)、PDT、aggregate awareness により BigQuery へのクエリを減らせる。
@@ -201,6 +203,7 @@
   - BigQuery + Looker は大量時系列データの分析と可視化に強い。一方、Looker 本体は個別見積もりで、BigQuery 側は無制限の生データスキャンや高頻度自動更新を許すと費用が膨らむ。
 
 ## 9. 更新履歴
+- 2026-10-28: Looker対話分析のプロモーション延長と将来割当を更新。BigQuery単価は再照合対象と明記。
 - 2026-05-07: 初版
 - 2026-05-11: BigQuery と Looker の料金体系、Looker edition、ユーザーライセンス、BI Engine、キャッシュ・PDT・aggregate awareness、概算モデルを追加。
 
